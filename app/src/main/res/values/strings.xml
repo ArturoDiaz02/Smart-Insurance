@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Smart_Insurance</string>
+    <string name="add">Add Insurance</string>
+    <string name="profile">Profile</string>
+    <string name="content_description_profile">Show Profile</string>
+    <string name="home">Home</string>
+    <string name="hello">Hola</string>
+    <string name="name">Alejandro Arce</string>
+    <string name="Asegurar">Asegurar</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="content_description_card_image">Card image</string>
+    <string name="secure">Asegurar</string>
+    <string name="category_image">Caterogy image</string>
 </resources>
