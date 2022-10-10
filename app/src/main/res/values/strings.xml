@@ -11,4 +11,5 @@
     <string name="content_description_card_image">Card image</string>
     <string name="secure">Asegurar</string>
     <string name="category_image">Caterogy image</string>
+    <string name="content_description_Home">Show Home</string>
 </resources>
