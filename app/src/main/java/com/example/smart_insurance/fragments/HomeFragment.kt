@@ -1,11 +1,13 @@
 package com.example.smart_insurance.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.smart_insurance.ObjectDetails
 import com.example.smart_insurance.adapter.CardAdapter
 import com.example.smart_insurance.databinding.FragmentHomeBinding
 
@@ -42,7 +44,8 @@ class HomeFragment : Fragment(), CardAdapter.OnItemClickListener {
     }
 
     override fun onItemClick(position: Int) {
-
+        val intent = Intent(this@HomeFragment.requireContext(), ObjectDetails::class.java)
+        startActivity(intent)
     }
 
 }

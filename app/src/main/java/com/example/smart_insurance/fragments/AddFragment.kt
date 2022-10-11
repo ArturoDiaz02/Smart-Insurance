@@ -1,5 +1,6 @@
 package com.example.smart_insurance.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.smart_insurance.CreateObject
+import com.example.smart_insurance.ObjectDetails
 import com.example.smart_insurance.adapter.CategoryAdapter
 import com.example.smart_insurance.databinding.FragmentAddBinding
 
@@ -42,7 +45,8 @@ class AddFragment : Fragment(), CategoryAdapter.OnItemClickListener  {
     }
 
     override fun onItemClick(position: Int) {
-        Toast.makeText(activity, "Item $position clicked", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this@AddFragment.requireContext(), CreateObject::class.java)
+        startActivity(intent)
     }
 
 }
