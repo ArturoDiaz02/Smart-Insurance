@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".CreateObject">
 
     <Button
@@ -13,6 +14,7 @@
         android:layout_marginStart="60dp"
         android:layout_marginEnd="60dp"
         android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/blue"
         android:text="Button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,9 +80,12 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="15dp"
+        android:backgroundTint="@color/white"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Name"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,6 +99,8 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="30dp"
+        android:background="@color/white"
+        app:boxBackgroundColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/checkBox2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,7 +119,9 @@
         android:layout_marginStart="30dp"
         android:layout_marginEnd="259dp"
         android:layout_marginBottom="53dp"
+        android:buttonTint="@color/white"
         android:text="CheckBox"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/cancelBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
