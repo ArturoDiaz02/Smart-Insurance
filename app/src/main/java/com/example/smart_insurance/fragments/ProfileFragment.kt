@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.smart_insurance.ConfigureGroup
 import com.example.smart_insurance.EditProfile
 import com.example.smart_insurance.R
 import com.example.smart_insurance.RegisterActivity
@@ -24,6 +25,11 @@ class ProfileFragment : Fragment() {
 
         binding.button5.setOnClickListener {
             val intent = Intent(this.context, EditProfile::class.java)
+            startActivity(intent)
+        }
+
+        binding.button7.setOnClickListener {
+            val intent = Intent(this.context, ConfigureGroup::class.java)
             startActivity(intent)
         }
 

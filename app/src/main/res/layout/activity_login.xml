@@ -60,7 +60,6 @@
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="38dp"
-        android:layout_marginTop="5dp"
         android:layout_marginEnd="38dp"
         android:layout_marginBottom="2dp"
         android:background="@drawable/shape"
@@ -75,7 +74,6 @@
         android:textStyle="bold"
         app:circularflow_defaultRadius="30px"
         app:circularflow_radiusInDP="30"
-        app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,8 +94,10 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.521"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
+        app:layout_constraintTop_toBottomOf="@+id/button3"
+        app:layout_constraintVertical_bias="0.279" />
 
     <ImageView
         android:id="@+id/imageView"

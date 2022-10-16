@@ -15,12 +15,8 @@ class ConfigureGroup : AppCompatActivity() {
         setContentView(binding.root)
         
         binding.backButton.setOnClickListener{
-            goBack()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 
-    private fun goBack(){
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-    }
 }
