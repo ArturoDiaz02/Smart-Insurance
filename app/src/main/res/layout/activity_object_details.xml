@@ -94,13 +94,15 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="128dp"
+        android:layout_width="150dp"
+        android:layout_height="126dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/textView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@drawable/DonQuijote"
+        tools:srcCompat="@drawable/DonQuijote" />
 
     <TextView
         android:id="@+id/textView2"

@@ -76,7 +76,8 @@
         app:layout_constraintEnd_toStartOf="@+id/secondaryThreeImg"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@drawable/donquijote"
+        tools:srcCompat="@drawable/donquijote" />
 
     <ImageView
         android:id="@+id/secondaryTwoImg"
@@ -86,7 +87,8 @@
         android:layout_marginEnd="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/secondaryFourImg"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@drawable/addimg"
+        tools:srcCompat="@drawable/addimg" />
 
     <ImageView
         android:id="@+id/secondaryThreeImg"
@@ -96,7 +98,8 @@
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toStartOf="@+id/secondaryFourImg"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@drawable/addimg"
+        tools:srcCompat="@drawable/addimg" />
 
     <ImageView
         android:id="@+id/secondaryOneImg"
@@ -106,7 +109,8 @@
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toStartOf="@+id/secondaryTwoImg"
         app:layout_constraintTop_toBottomOf="@+id/secondaryThreeImg"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@drawable/addimg"
+        tools:srcCompat="@drawable/addimg" />
 
     <ImageView
         android:id="@+id/secondaryFourImg"
@@ -116,7 +120,8 @@
         android:layout_marginEnd="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@drawable/addimg"
+        tools:srcCompat="@drawable/addimg" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
