@@ -21,6 +21,11 @@ class LoginActivity : AppCompatActivity() {
         binding.button3.setOnClickListener{
             goMain()
         }
+
+        binding.button4.setOnClickListener{
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun goMain(){
