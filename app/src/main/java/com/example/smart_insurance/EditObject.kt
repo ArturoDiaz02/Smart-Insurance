@@ -16,8 +16,7 @@ class EditObject : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.imageButton5.setOnClickListener {
-            val intent = Intent(this, ObjectDetails::class.java)
-            startActivity(intent)
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 }

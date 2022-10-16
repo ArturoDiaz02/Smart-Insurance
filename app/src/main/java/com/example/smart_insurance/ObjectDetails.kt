@@ -15,8 +15,7 @@ class ObjectDetails : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.imageButton4.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            onBackPressedDispatcher.onBackPressed()
         }
 
         binding.button2.setOnClickListener {

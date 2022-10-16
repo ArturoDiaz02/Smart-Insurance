@@ -15,8 +15,7 @@ class EditProfile : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.imageButton3.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 }
