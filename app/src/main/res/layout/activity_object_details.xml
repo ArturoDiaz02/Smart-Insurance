@@ -101,8 +101,8 @@
         app:layout_constraintEnd_toStartOf="@+id/textView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:srcCompat="@drawable/DonQuijote"
-        tools:srcCompat="@drawable/DonQuijote" />
+        app:srcCompat="@drawable/donquijote"
+        tools:srcCompat="@drawable/donquijote" />
 
     <TextView
         android:id="@+id/textView2"
