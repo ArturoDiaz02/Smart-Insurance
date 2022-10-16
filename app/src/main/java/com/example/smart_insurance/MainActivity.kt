@@ -53,8 +53,8 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.menu.getItem(1).isEnabled = enable
 
         if (enable){
-            binding.bottomNavigationView.menu.getItem(1).setIcon(R.drawable.ic_baseline_help_24)
-            binding.bottomNavigationView.menu.getItem(1).title = "Help"
+            binding.bottomNavigationView.menu.getItem(1).setIcon(R.drawable.ic_baseline_add_circle_24)
+            binding.bottomNavigationView.menu.getItem(1).title = "Add"
         }else{
             binding.bottomNavigationView.menu.getItem(1).icon = null
             binding.bottomNavigationView.menu.getItem(1).title = ""
