@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Smart_Insurance</string>
+    <string name="app_name">SIP</string>
     <string name="add">Add Insurance</string>
     <string name="profile">Profile</string>
     <string name="content_description_profile">Show Profile</string>
