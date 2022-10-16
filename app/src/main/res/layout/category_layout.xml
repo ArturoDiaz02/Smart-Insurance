@@ -11,8 +11,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/relativeLayoutCategory"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:background="@drawable/shape"
@@ -21,11 +21,26 @@
 
         <ImageView
             android:id="@+id/image_category"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:contentDescription="@string/category_image"
-            tools:layout_editor_absoluteX="-19dp"
-            tools:layout_editor_absoluteY="-16dp" />
+            cardViewCategory:layout_constraintEnd_toEndOf="parent"
+            cardViewCategory:layout_constraintHorizontal_bias="0.48"
+            cardViewCategory:layout_constraintStart_toStartOf="parent"
+            cardViewCategory:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:textColor="#464646"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            cardViewCategory:layout_constraintEnd_toEndOf="parent"
+            cardViewCategory:layout_constraintStart_toStartOf="parent"
+            cardViewCategory:layout_constraintTop_toBottomOf="@+id/image_category" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

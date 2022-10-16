@@ -17,6 +17,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
         </FrameLayout>
 
         <com.google.android.material.bottomappbar.BottomAppBar
@@ -27,7 +28,7 @@
             app:fabCradleRoundedCornerRadius="20dp"
             app:fabCradleVerticalOffset="8dp"
             android:layout_gravity="bottom"
-            android:backgroundTint="#1C1C1C">
+            android:backgroundTint="#343434">
 
                 <com.google.android.material.bottomnavigation.BottomNavigationView
                     android:id="@+id/bottomNavigationView"

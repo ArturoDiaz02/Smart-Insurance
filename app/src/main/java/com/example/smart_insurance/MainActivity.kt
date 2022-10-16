@@ -18,18 +18,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setFragment(HomeFragment.newInstance())
         binding.bottomNavigationView.background = null
-        binding.bottomNavigationView.menu.getItem(1).isEnabled = false
+        binding.bottomNavigationView.menu.getItem(0).isChecked = true
+        itemEnable(false)
 
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when(item.itemId){
                 R.id.menu_item_Home -> {
                     setFragment(HomeFragment.newInstance())
                     binding.floatingActionButton.show()
+                    itemEnable(false)
                     true
                 }
                 R.id.menu_item_profile -> {
                     setFragment(ProfileFragment())
                     binding.floatingActionButton.show()
+                    itemEnable(false)
                     true
                 }
                 else -> false
@@ -40,7 +43,21 @@ class MainActivity : AppCompatActivity() {
             setFragment(AddFragment.newInstance())
             binding.floatingActionButton.hide()
             binding.bottomNavigationView.menu.getItem(1).isChecked = true
+            itemEnable(true)
 
+        }
+
+    }
+
+    private fun itemEnable(enable: Boolean){
+        binding.bottomNavigationView.menu.getItem(1).isEnabled = enable
+
+        if (enable){
+            binding.bottomNavigationView.menu.getItem(1).setIcon(R.drawable.ic_baseline_help_24)
+            binding.bottomNavigationView.menu.getItem(1).title = "Help"
+        }else{
+            binding.bottomNavigationView.menu.getItem(1).icon = null
+            binding.bottomNavigationView.menu.getItem(1).title = ""
         }
 
     }

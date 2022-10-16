@@ -88,7 +88,7 @@
             android:layout_marginTop="17dp"
             android:layout_marginEnd="15dp"
             android:layout_toEndOf="@+id/all"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/last"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
@@ -96,9 +96,16 @@
             android:isScrollContainer="true"/>
 
 
-
-
-
+        <TextView
+            android:id="@+id/last"
+            android:layout_width="411dp"
+            android:layout_height="55dp"
+            android:layout_gravity="bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.997" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

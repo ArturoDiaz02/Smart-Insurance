@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smart_insurance.R
 
@@ -15,7 +16,7 @@ class CategoryAdapter(private val itemClickListener: OnItemClickListener) : Recy
     private val images = arrayOf(R.drawable.ic_baseline_menu_book_24, R.drawable.ic_baseline_laptop_24, R.drawable.ic_baseline_phone_iphone_24, R.drawable.ic_baseline_pets_24, R.drawable.ic_baseline_photo_camera_24,
         R.drawable.ic_baseline_print_24, R.drawable.ic_baseline_radio_24, R.drawable.ic_baseline_tv_24, R.drawable.ic_baseline_videogame_asset_24, R.drawable.ic_baseline_watch_24, R.drawable.ic_baseline_mouse_24, R.drawable.ic_baseline_sports_basketball_24)
     private val colors = arrayOf("#58FF27", "#58FF27","#58FF27", "#446CFF", "#446CFF", "#446CFF",  "#F80000", "#F80000", "#F80000", "#F6D200", "#F6D200", "#F6D200")
-    private val descriptor = arrayOf("Libros", "Computadoras", "Celulares", "Mascotas", "Cámaras", "Impresoras", "Radios", "Televisores", "Videojuegos", "Relojes", "Mouse", "Balones")
+    private val titles = arrayOf("Libros", "Computadoras", "Celulares", "Mascotas", "Cámaras", "Impresoras", "Radios", "Televisores", "Videojuegos", "Relojes", "Mouse", "Balones")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.category_layout, parent, false)
@@ -26,6 +27,7 @@ class CategoryAdapter(private val itemClickListener: OnItemClickListener) : Recy
 
         holder.image.setImageResource(images[position])
         holder.layout.setBackgroundColor(android.graphics.Color.parseColor(colors[position]))
+        holder.title.text = titles[position]
     }
 
     override fun getItemCount(): Int {
@@ -36,6 +38,7 @@ class CategoryAdapter(private val itemClickListener: OnItemClickListener) : Recy
 
         var image: ImageView = itemView.findViewById(R.id.image_category)
         var layout: View = itemView.findViewById(R.id.relativeLayoutCategory)
+        var title: TextView = itemView.findViewById(R.id.text_category)
 
         init {
             itemView.setOnClickListener(this)
