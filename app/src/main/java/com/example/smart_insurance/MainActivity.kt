@@ -3,6 +3,7 @@ package com.example.smart_insurance
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.smart_insurance.databinding.ActivityMainBinding
@@ -58,8 +59,17 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.menu.getItem(1).isEnabled = enable
 
         if (enable){
-            binding.bottomNavigationView.menu.getItem(1).setIcon(R.drawable.ic_baseline_add_circle_24)
-            binding.bottomNavigationView.menu.getItem(1).title = "Add"
+            val timer = object: CountDownTimer(200, 40) {
+                override fun onTick(millisUntilFinished: Long) {}
+
+                override fun onFinish() {
+                    binding.bottomNavigationView.menu.getItem(1).setIcon(R.drawable.ic_baseline_add_circle_24)
+                    binding.bottomNavigationView.menu.getItem(1).title = "Add"
+                }
+            }
+            timer.start()
+
+
         }else{
             binding.bottomNavigationView.menu.getItem(1).icon = null
             binding.bottomNavigationView.menu.getItem(1).title = ""
