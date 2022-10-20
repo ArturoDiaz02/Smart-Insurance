@@ -64,10 +64,11 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onFinish() {
                     binding.bottomNavigationView.menu.getItem(1).setIcon(R.drawable.ic_baseline_add_circle_24)
-                    binding.bottomNavigationView.menu.getItem(1).title = "Add"
+
                 }
             }
             timer.start()
+            binding.bottomNavigationView.menu.getItem(1).title = "Add"
 
 
         }else{
