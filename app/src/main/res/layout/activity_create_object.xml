@@ -49,58 +49,68 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/mainImg"
         android:layout_width="0dp"
         android:layout_height="170dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="11dp"
+        android:scaleType="centerCrop"
+        android:background="@drawable/shape_image"
         app:layout_constraintEnd_toStartOf="@+id/SecondaryOneImg"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/addimg"
+        android:src="@drawable/addimg"
         tools:srcCompat="@drawable/addimg" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/SecondaryOneImg"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="10dp"
+        android:scaleType="centerCrop"
+        android:background="@null"
         app:layout_constraintEnd_toStartOf="@+id/SecondaryTwoImg"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/addimg"
         tools:srcCompat="@drawable/addimg" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/SecondaryThreeImg"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:scaleType="centerCrop"
+        android:background="@null"
         app:layout_constraintEnd_toStartOf="@+id/SecondaryFourImg"
         app:layout_constraintTop_toBottomOf="@+id/SecondaryOneImg"
         app:srcCompat="@drawable/addimg"
         tools:srcCompat="@drawable/addimg" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/SecondaryFourImg"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="30dp"
+        android:scaleType="centerCrop"
+        android:background="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/SecondaryTwoImg"
         app:srcCompat="@drawable/addimg"
         tools:srcCompat="@drawable/addimg" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/SecondaryTwoImg"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="30dp"
+        android:scaleType="centerCrop"
+        android:background="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/addimg"
