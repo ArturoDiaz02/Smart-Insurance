@@ -1,16 +1,9 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.Smart_Insurance" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple</item>
-        <item name="colorPrimaryVariant">#2196F3</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@color/black</item>
         <!-- Customize your theme here. -->
     </style>
 
@@ -50,7 +43,7 @@
         <item name="android:padding">0dp</item>
     </style>
 
-    <style name="ScreenNameTextView" parent="@android:style/Widget.EditText">
+    <style name="ScreenNameTextView" parent="@android:style/Widget.EditText" >
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">16dp</item>
@@ -59,9 +52,5 @@
         <item name="hintTextColor">@color/cyan</item>
         <item name="android:textColor">@color/cyan</item>
     </style>
-    <style name="Theme.Smart_Insurance.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-    <style name="Theme.InsuranceApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>

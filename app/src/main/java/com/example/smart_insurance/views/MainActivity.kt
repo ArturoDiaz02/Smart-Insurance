@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), ProfileFragment.OnItemClickListener {
                     true
                 }
                 R.id.menu_item_profile -> {
-                    val fragment = ProfileFragment.newInstance()
+                    val fragment = ProfileFragment.newInstance(user)
                     fragment.setListener(this)
                     setFragment(fragment)
                     binding.floatingActionButton.show()
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), ProfileFragment.OnItemClickListener {
         }
 
         binding.floatingActionButton.setOnClickListener {
-            setFragment(AddFragment.newInstance())
+            setFragment(AddFragment.newInstance(user))
             binding.floatingActionButton.hide()
             binding.bottomNavigationView.menu.getItem(1).isChecked = true
             itemEnable(true)

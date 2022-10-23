@@ -10,8 +10,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.smart_insurance.views.CreateObject
 import com.example.smart_insurance.adapter.CategoryAdapter
 import com.example.smart_insurance.databinding.FragmentAddBinding
+import com.example.smart_insurance.model.User
 
-class AddFragment : Fragment(), CategoryAdapter.OnItemClickListener  {
+class AddFragment(private val user: User) : Fragment(), CategoryAdapter.OnItemClickListener  {
 
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
@@ -39,7 +40,7 @@ class AddFragment : Fragment(), CategoryAdapter.OnItemClickListener  {
 
     companion object{
         @JvmStatic
-        fun newInstance() = AddFragment()
+        fun newInstance(user: User) = AddFragment(user)
     }
 
     override fun onItemClick(position: Int) {
