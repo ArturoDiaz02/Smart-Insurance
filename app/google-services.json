@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "929567944384",
+    "project_id": "smart-insurance-fac12",
+    "storage_bucket": "smart-insurance-fac12.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:929567944384:android:a454a62b6d1b0ed8f28725",
+        "android_client_info": {
+          "package_name": "com.example.smart_insurance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "929567944384-usrd1l6l5fms3060u44tn4emokkiphil.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.smart_insurance",
+            "certificate_hash": "e880034cd51222f97e0ea57ea575b0c50853de7c"
+          }
+        },
+        {
+          "client_id": "929567944384-8rc4fpuogaq572rt9jtcuda1no58in89.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8a3QOOZ-9m7y_TLjGDiOtbjQc_qr4KUk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "929567944384-8rc4fpuogaq572rt9jtcuda1no58in89.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

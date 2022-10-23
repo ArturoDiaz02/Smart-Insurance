@@ -107,22 +107,6 @@
             app:layout_constraintTop_toBottomOf="@+id/button7" />
 
         <Button
-            android:id="@+id/button9"
-            android:layout_width="317dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="50dp"
-            android:backgroundTint="@color/grey"
-            android:text="Soporte"
-            android:textAllCaps="false"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button8" />
-
-        <Button
             android:id="@+id/button10"
             android:layout_width="317dp"
             android:layout_height="60dp"
@@ -136,7 +120,23 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button9" />
+            app:layout_constraintTop_toBottomOf="@+id/button8" />
+
+        <Button
+            android:id="@+id/button13"
+            android:layout_width="317dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="50dp"
+            android:backgroundTint="@color/grey"
+            android:text="Cerrar sesión"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button10" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

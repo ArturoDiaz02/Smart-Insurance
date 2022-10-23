@@ -17,28 +17,28 @@
         android:theme="@style/Theme.Smart_Insurance"
         tools:targetApi="31">
         <activity
-            android:name=".ConfigureGroup"
+            android:name=".views.ConfigureGroup"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".EditProfile"
+            android:name=".views.EditProfile"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".EditObject"
+            android:name=".views.EditObject"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".views.LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -52,19 +52,19 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".views.MainActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ObjectDetails"
+            android:name=".views.ObjectDetails"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".CreateObject"
+            android:name=".views.CreateObject"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".views.RegisterActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
     </application>

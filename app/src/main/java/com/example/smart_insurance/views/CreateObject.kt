@@ -1,4 +1,4 @@
-package com.example.smart_insurance
+package com.example.smart_insurance.views
 
 import android.content.ContentValues
 import android.content.Intent

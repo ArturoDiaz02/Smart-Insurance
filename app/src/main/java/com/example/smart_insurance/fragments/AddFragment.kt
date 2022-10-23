@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.smart_insurance.CreateObject
+import com.example.smart_insurance.views.CreateObject
 import com.example.smart_insurance.adapter.CategoryAdapter
 import com.example.smart_insurance.databinding.FragmentAddBinding
 

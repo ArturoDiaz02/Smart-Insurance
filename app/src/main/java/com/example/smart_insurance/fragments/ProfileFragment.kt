@@ -6,16 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.smart_insurance.ConfigureGroup
-import com.example.smart_insurance.EditProfile
-import com.example.smart_insurance.R
-import com.example.smart_insurance.RegisterActivity
+import com.example.smart_insurance.views.ConfigureGroup
+import com.example.smart_insurance.views.EditProfile
 import com.example.smart_insurance.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    private var listener: OnItemClickListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +32,10 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         }
 
+        binding.button13.setOnClickListener {
+            listener?.logOut()
+        }
+
         return binding.root
     }
 
@@ -44,5 +47,13 @@ class ProfileFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance() = ProfileFragment()
+    }
+
+    interface OnItemClickListener{
+        fun logOut()
+    }
+
+    fun setListener(listener: OnItemClickListener){
+        this.listener = listener
     }
 }
