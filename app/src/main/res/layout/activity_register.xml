@@ -12,13 +12,14 @@
         android:layout_width="136dp"
         android:layout_height="52dp"
         android:layout_marginStart="138dp"
-        android:layout_marginTop="62dp"
+        android:layout_marginTop="36dp"
         android:layout_marginEnd="138dp"
         android:text="Registro"
         android:textColor="#FFFFFF"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -158,16 +159,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
-    <EditText
+
+    <DatePicker
         android:id="@+id/editTextDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="248dp"
+        android:layout_height="54dp"
         android:layout_marginStart="46dp"
         android:backgroundTint="#FFFFFF"
+        android:calendarTextColor="#FFF7F7"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
         android:ems="10"
+        android:headerBackground="@color/blue"
         android:hint="Fecha"
         android:inputType="date"
-        android:textSize="20sp"
+        android:textSize="12dp"
         app:layout_constraintBottom_toTopOf="@+id/textView17"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
