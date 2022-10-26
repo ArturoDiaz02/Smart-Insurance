@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isNotEmpty
 import com.example.smart_insurance.databinding.ActivityRegisterBinding
 import com.example.smart_insurance.model.User
 import com.google.firebase.auth.ktx.auth
@@ -30,7 +31,7 @@ class RegisterActivity : AppCompatActivity() {
 
             if(binding.editTextTextPersonName4.text.toString().isNotEmpty() &&
                 binding.editTextTextPersonName5.text.toString().isNotEmpty() &&
-                binding.editTextDate.text.toString().isNotEmpty() &&
+                binding.editTextDate.text.toString().isNotEmpty()  &&
                 binding.editTextNumber.text.toString().isNotEmpty() &&
                 binding.editTextTextEmailAddress.text.toString().isNotEmpty() &&
                 binding.editTextTextPassword.text.toString().isNotEmpty() &&
@@ -49,6 +50,8 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun register() {
+
+        val date =
         Firebase.auth.createUserWithEmailAndPassword(
             binding.editTextTextEmailAddress.text.toString(),
             binding.editTextTextPassword.text.toString()
