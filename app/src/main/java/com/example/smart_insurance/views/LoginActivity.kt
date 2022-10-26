@@ -50,6 +50,26 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.forgot.setOnClickListener{
+            val dialog = EmailDialog { email ->
+
+                if (email.isNotEmpty()) {
+                    Firebase.auth.sendPasswordResetEmail(email).addOnSuccessListener {
+                        Toast.makeText(this, "Se envio un correo para restablecer su contraseña", Toast.LENGTH_SHORT).show()
+
+                    }.addOnFailureListener{
+                        Toast.makeText(this, "No se pudo enviar el correo", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(this, "Ingrese un correo", Toast.LENGTH_SHORT).show()
+                }
+
+
+            }
+
+            dialog.show(supportFragmentManager, "EmailDialog")
+        }
+
     }
 
     private val resultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
@@ -125,6 +145,20 @@ class LoginActivity : AppCompatActivity() {
 
         }else{
             Toast.makeText(this, "Please enter your username and password", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun forgotPassword(){
+        val email = binding.editTextTextPersonName2.text.toString()
+
+        if(email.isNotEmpty()){
+            Firebase.auth.sendPasswordResetEmail(email).addOnSuccessListener {
+                Toast.makeText(this, "Se envio un correo para restablecer su contraseña", Toast.LENGTH_SHORT).show()
+            }.addOnFailureListener{
+                Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
+            }
+        }else{
+            Toast.makeText(this, "Please enter your username", Toast.LENGTH_SHORT).show()
         }
     }
 
