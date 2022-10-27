@@ -7,20 +7,10 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="InputsTextField" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColorHint">@color/white</item>
-        <item name="boxBackgroundColor">@color/white</item>
-        <item name="boxStrokeColor">@color/white</item>
-        <item name="hintTextColor">@color/white</item>
+    <style name="Dialog" parent="CardView.Light">
+
     </style>
 
-    <style name="TextInputEditText">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
 
     <style name="primaryButton" parent="@android:style/Widget.Button">
         <item name="android:layout_width">0dp</item>

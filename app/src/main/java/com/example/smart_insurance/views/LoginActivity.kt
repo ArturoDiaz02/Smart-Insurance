@@ -38,7 +38,9 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.button.setOnClickListener{
-            loginEmailPassword()
+            val progressBar = ProgressCicleBar()
+            progressBar.show(supportFragmentManager, "progress")
+            loginEmailPassword(progressBar)
         }
 
         binding.button3.setOnClickListener{
@@ -73,6 +75,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private val resultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
+        val progressBar = ProgressCicleBar()
+        progressBar.show(supportFragmentManager, "progress")
+
         if (result.resultCode == Activity.RESULT_OK) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
             val account = task.result
@@ -98,7 +103,7 @@ class LoginActivity : AppCompatActivity() {
 
                 }.addOnFailureListener{
                     Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
-
+                    progressBar.dismiss()
                 }
             }
 
@@ -117,7 +122,7 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    private fun loginEmailPassword(){
+    private fun loginEmailPassword(progressBar: ProgressCicleBar){
         val userName = binding.editTextTextPersonName2.text.toString()
         val password = binding.editTextTextPersonName3.text.toString()
 
@@ -136,31 +141,21 @@ class LoginActivity : AppCompatActivity() {
 
                }else{
                    Toast.makeText(this, "Please verify your email", Toast.LENGTH_SHORT).show()
+                   progressBar.dismiss()
                }
 
            }.addOnFailureListener{
                Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
-
+               progressBar.dismiss()
            }
 
         }else{
             Toast.makeText(this, "Please enter your username and password", Toast.LENGTH_SHORT).show()
+            progressBar.dismiss()
         }
+
     }
 
-    private fun forgotPassword(){
-        val email = binding.editTextTextPersonName2.text.toString()
-
-        if(email.isNotEmpty()){
-            Firebase.auth.sendPasswordResetEmail(email).addOnSuccessListener {
-                Toast.makeText(this, "Se envio un correo para restablecer su contraseña", Toast.LENGTH_SHORT).show()
-            }.addOnFailureListener{
-                Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
-            }
-        }else{
-            Toast.makeText(this, "Please enter your username", Toast.LENGTH_SHORT).show()
-        }
-    }
 
     private fun saveUser(user: User){
         val sp = getSharedPreferences("smart_insurance", MODE_PRIVATE)

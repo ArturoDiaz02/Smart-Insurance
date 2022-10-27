@@ -1,11 +1,8 @@
 package com.example.smart_insurance.views
 
-import android.app.ProgressDialog
 import android.os.Bundle
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isNotEmpty
 import com.example.smart_insurance.databinding.ActivityRegisterBinding
 import com.example.smart_insurance.model.User
 import com.google.firebase.auth.ktx.auth
@@ -26,6 +23,8 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         binding.button11.setOnClickListener{
+            val progressDialog = ProgressCicleBar()
+            progressDialog.show(supportFragmentManager, "progress")
             val pass = binding.editTextTextPassword.text.toString()
             val passAux = binding.editTextTextPassword2.text.toString()
 
@@ -38,20 +37,24 @@ class RegisterActivity : AppCompatActivity() {
                 binding.editTextTextPassword2.text.toString().isNotEmpty()) {
 
                 if (pass == passAux) {
-                    register()
+                    register(progressDialog)
+
                 } else {
+
                     Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+                    progressDialog.dismiss()
                 }
 
             }else{
                 Toast.makeText(this, "Por favor, rellene todos los campos", Toast.LENGTH_SHORT).show()
+                progressDialog.dismiss()
             }
         }
+
     }
 
-    private fun register() {
+    private fun register(progressDialog: ProgressCicleBar) {
 
-        val date =
         Firebase.auth.createUserWithEmailAndPassword(
             binding.editTextTextEmailAddress.text.toString(),
             binding.editTextTextPassword.text.toString()
@@ -73,7 +76,9 @@ class RegisterActivity : AppCompatActivity() {
 
         }.addOnFailureListener{
             Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
+            progressDialog.dismiss()
         }
+
 
     }
 
