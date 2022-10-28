@@ -127,15 +127,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_revert" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/imageView5"
         android:layout_width="135dp"
         android:layout_height="128dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="80dp"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/addimg"
-        tools:srcCompat="@drawable/addimg" />
+        tools:srcCompat="@drawable/addimg"
+        tools:ignore="ContentDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

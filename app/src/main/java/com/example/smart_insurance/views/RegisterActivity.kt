@@ -8,6 +8,7 @@ import com.example.smart_insurance.model.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -60,13 +61,16 @@ class RegisterActivity : AppCompatActivity() {
             binding.editTextTextPassword.text.toString()
 
         ).addOnSuccessListener {
+            val filename = UUID.randomUUID().toString()
+
             val user = User(
                 Firebase.auth.currentUser?.uid.toString(),
                 binding.editTextTextPersonName4.text.toString(),
                 binding.editTextTextPersonName5.text.toString(),
                 binding.editTextDate.text.toString(),
                 binding.editTextNumber.text.toString(),
-                binding.editTextTextEmailAddress.text.toString()
+                binding.editTextTextEmailAddress.text.toString(),
+                filename
             )
 
             Firebase.firestore.collection("users").document(user.id).set(user).addOnSuccessListener {

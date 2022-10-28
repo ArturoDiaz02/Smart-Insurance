@@ -7,10 +7,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
+import com.example.smart_insurance.R
 import com.example.smart_insurance.views.ConfigureGroup
 import com.example.smart_insurance.views.EditProfile
 import com.example.smart_insurance.databinding.FragmentProfileBinding
 import com.example.smart_insurance.model.User
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 class ProfileFragment(private val user: User)  : Fragment() {
 
@@ -26,6 +30,13 @@ class ProfileFragment(private val user: User)  : Fragment() {
        _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
         binding.textView6.text = user.name + " " + user.lassName
+
+        Firebase.storage.reference.child("profileImages").child(user.profileImage!!).downloadUrl.addOnSuccessListener {
+            Glide.with(binding.imageView3).load(it).into(binding.imageView3)
+        }.addOnFailureListener{
+            binding.imageView3.setImageResource(R.drawable.handsomesquid)
+        }
+
 
         binding.button5.setOnClickListener {
             val intent = Intent(this.context, EditProfile::class.java)
