@@ -16,6 +16,7 @@ import com.example.smart_insurance.model.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
+import java.io.File
 
 class MainActivity : AppCompatActivity(), ProfileFragment.OnItemClickListener {
 

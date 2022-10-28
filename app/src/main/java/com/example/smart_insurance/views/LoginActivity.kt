@@ -172,7 +172,6 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-
     private fun saveUser(user: User){
         val sp = getSharedPreferences("smart_insurance", MODE_PRIVATE)
         val json = Gson().toJson(user)

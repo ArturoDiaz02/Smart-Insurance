@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
                 tools:ignore="ContentDescription"
+                app:srcCompat="@drawable/handsomesquid"
                 tools:srcCompat="@drawable/handsomesquid" />
 
         </androidx.cardview.widget.CardView>
