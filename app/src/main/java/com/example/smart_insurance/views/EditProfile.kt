@@ -43,7 +43,7 @@ class EditProfile: AppCompatActivity() {
         }
 
         binding.imageView5.setOnClickListener{
-            val intent = Intent(Intent.ACTION_GET_CONTENT).also{
+            val intent = Intent(Intent.ACTION_PICK).also{
                 it.type = "image/*"
             }
 

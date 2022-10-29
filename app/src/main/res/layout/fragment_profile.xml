@@ -11,64 +11,65 @@
         android:layout_height="match_parent"
         android:background="#000000">
 
+
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
             android:layout_width="151dp"
             android:layout_height="138dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginEnd="50dp"
+
             android:backgroundTint="@color/black"
-            app:cardCornerRadius="150dp"
+            android:scaleType="centerCrop"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.18"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.04000002">
-
+            app:layout_constraintVertical_bias="0.045">
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                tools:ignore="ContentDescription"
                 app:srcCompat="@drawable/handsomesquid"
+                tools:ignore="ContentDescription"
                 tools:srcCompat="@drawable/handsomesquid" />
 
         </androidx.cardview.widget.CardView>
 
-
         <TextView
             android:id="@+id/textView6"
-            android:layout_width="0dp"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginEnd="50dp"
             android:text="Alejandro Arce"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
-            android:textSize="34sp"
+            android:textSize="30sp"
+
+
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/last"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.815"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView2"
-            app:layout_constraintVertical_bias="0.015" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.045" />
 
         <Button
             android:id="@+id/button5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="144dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="144dp"
+
+            android:layout_marginTop="12dp"
+
             android:background="@drawable/shape"
             android:backgroundTint="@color/blue"
             android:text="Editar perfil"
             android:textAllCaps="false"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.819"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
@@ -78,7 +79,7 @@
             android:layout_height="60dp"
             android:layout_marginStart="50dp"
 
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="44dp"
             android:layout_marginEnd="50dp"
             android:backgroundTint="@color/grey"
             android:fontFamily="sans-serif-medium"
@@ -95,7 +96,7 @@
             android:layout_width="317dp"
             android:layout_height="60dp"
             android:layout_marginStart="50dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="50dp"
             android:backgroundTint="@color/grey"
             android:text="Configurar grupo"
@@ -111,7 +112,7 @@
             android:layout_width="317dp"
             android:layout_height="60dp"
             android:layout_marginStart="50dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="50dp"
             android:backgroundTint="@color/grey"
             android:text="Contactenos"
@@ -127,7 +128,7 @@
             android:layout_width="317dp"
             android:layout_height="60dp"
             android:layout_marginStart="50dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="50dp"
             android:backgroundTint="@color/grey"
             android:text="Cerrar sesión"
@@ -143,7 +144,7 @@
             android:layout_width="317dp"
             android:layout_height="60dp"
             android:layout_marginStart="50dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="50dp"
             android:backgroundTint="@color/grey"
             android:text="Seguridad"
@@ -153,6 +154,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button7" />
+
+        <TextView
+            android:id="@+id/last"
+            android:layout_width="411dp"
+            android:layout_height="55dp"
+            android:layout_gravity="bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.997" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
