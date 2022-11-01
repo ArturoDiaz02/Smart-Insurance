@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smart_insurance.databinding.ActivityRegisterBinding
+import com.example.smart_insurance.fragments.DatePickerFragment
 import com.example.smart_insurance.model.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -52,6 +53,19 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
+        binding.editTextDate.setOnClickListener {
+            showDatePickerDialog()
+        }
+
+    }
+
+    private fun showDatePickerDialog() {
+        val datePicker = DatePickerFragment { day, month, year -> onDateSelected(day, month, year) }
+        datePicker.show(supportFragmentManager, "datePicker")
+    }
+
+    private fun onDateSelected(day: Int, month: Int, year: Int) {
+        binding.editTextDate.setText("$day/$month/$year")
     }
 
     private fun register(progressDialog: ProgressCicleBar) {
