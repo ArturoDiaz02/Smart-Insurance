@@ -8,13 +8,19 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smart_insurance.R
 
-class CardAdapter(private val itemClickListener: OnItemClickListener) : RecyclerView.Adapter<CardAdapter.CardViewHolder>(){
+class CardAdapter(private val itemClickListener: OnItemClickListener) :
+    RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
 
     //private val cards = ArrayList<Card>()
 
     private val titles = arrayOf("Don Quijote edicion 1", "MacBook Air", "Iphone 14")
-    private val dates = arrayOf("01/05/2022 - 01/10/2022", "01/08/2022 - 01/10/2022", "01/05/2022 - 01/10/2022")
-    private val images = arrayOf(R.drawable.ic_baseline_menu_book_24, R.drawable.ic_baseline_laptop_24, R.drawable.ic_baseline_phone_iphone_24)
+    private val dates =
+        arrayOf("01/05/2022 - 01/10/2022", "01/08/2022 - 01/10/2022", "01/05/2022 - 01/10/2022")
+    private val images = arrayOf(
+        R.drawable.ic_baseline_menu_book_24,
+        R.drawable.ic_baseline_laptop_24,
+        R.drawable.ic_baseline_phone_iphone_24
+    )
     private val colors = arrayOf("#446CFF", "#58FF27", "#D547FF")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
@@ -34,7 +40,8 @@ class CardAdapter(private val itemClickListener: OnItemClickListener) : Recycler
         return colors.size
     }
 
-    inner class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
 
         var image: ImageView = itemView.findViewById(R.id.image_card)
         var title: TextView = itemView.findViewById(R.id.title_card)
@@ -53,7 +60,7 @@ class CardAdapter(private val itemClickListener: OnItemClickListener) : Recycler
         }
     }
 
-    interface OnItemClickListener{
+    interface OnItemClickListener {
         fun onItemClick(position: Int)
     }
 

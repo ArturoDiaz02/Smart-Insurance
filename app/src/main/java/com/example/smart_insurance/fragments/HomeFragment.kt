@@ -42,9 +42,9 @@ class HomeFragment(private val user: User) : Fragment(), CardAdapter.OnItemClick
         _binding = null
     }
 
-    companion object{
+    companion object {
         @JvmStatic
-       fun newInstance(user: User) = HomeFragment(user)
+        fun newInstance(user: User) = HomeFragment(user)
 
     }
 

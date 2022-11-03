@@ -7,7 +7,7 @@ import android.view.Gravity
 import androidx.fragment.app.DialogFragment
 import com.example.smart_insurance.databinding.DialogInputBinding
 
-class EmailDialog (private val onSubmitClick: (String) -> Unit) : DialogFragment() {
+class EmailDialog(private val onSubmitClick: (String) -> Unit) : DialogFragment() {
 
     private lateinit var binding: DialogInputBinding
 

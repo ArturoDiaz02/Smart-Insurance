@@ -1,11 +1,9 @@
 package com.example.smart_insurance.views
 
-import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.annotation.RequiresApi
-import com.example.smart_insurance.databinding.ActivityCreateObjectBinding
 import com.example.smart_insurance.databinding.ActivityEditObjectBinding
 
 class EditObject : AppCompatActivity() {

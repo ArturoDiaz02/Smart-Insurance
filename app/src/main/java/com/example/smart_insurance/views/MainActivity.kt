@@ -12,14 +12,10 @@ import com.example.smart_insurance.databinding.ActivityMainBinding
 import com.example.smart_insurance.fragments.AddFragment
 import com.example.smart_insurance.fragments.HomeFragment
 import com.example.smart_insurance.fragments.ProfileFragment
-import com.example.smart_insurance.model.Category
 import com.example.smart_insurance.model.User
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
-import java.io.File
 
 class MainActivity : AppCompatActivity(), ProfileFragment.OnItemClickListener {
 
@@ -39,7 +35,7 @@ class MainActivity : AppCompatActivity(), ProfileFragment.OnItemClickListener {
 
 
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.menu_item_Home -> {
                     setFragment(HomeFragment.newInstance(user))
                     binding.floatingActionButton.show()
@@ -66,19 +62,25 @@ class MainActivity : AppCompatActivity(), ProfileFragment.OnItemClickListener {
 
         }
 
-        requestPermissions(arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE), 1)
+        requestPermissions(
+            arrayOf(
+                android.Manifest.permission.CAMERA,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE
+            ), 1
+        )
 
     }
 
-    private fun itemEnable(enable: Boolean){
+    private fun itemEnable(enable: Boolean) {
         binding.bottomNavigationView.menu.getItem(1).isEnabled = enable
 
-        if (enable){
-            val timer = object: CountDownTimer(200, 40) {
+        if (enable) {
+            val timer = object : CountDownTimer(200, 40) {
                 override fun onTick(millisUntilFinished: Long) {}
 
                 override fun onFinish() {
-                    binding.bottomNavigationView.menu.getItem(1).setIcon(R.drawable.ic_baseline_add_circle_24)
+                    binding.bottomNavigationView.menu.getItem(1)
+                        .setIcon(R.drawable.ic_baseline_add_circle_24)
 
                 }
             }
@@ -86,7 +88,7 @@ class MainActivity : AppCompatActivity(), ProfileFragment.OnItemClickListener {
             binding.bottomNavigationView.menu.getItem(1).title = "Add"
 
 
-        }else{
+        } else {
             binding.bottomNavigationView.menu.getItem(1).icon = null
             binding.bottomNavigationView.menu.getItem(1).title = ""
         }
@@ -99,12 +101,12 @@ class MainActivity : AppCompatActivity(), ProfileFragment.OnItemClickListener {
         fragmentTransaction.commit()
     }
 
-    private fun login(){
+    private fun login() {
 
-        if (Firebase.auth.currentUser == null){
+        if (Firebase.auth.currentUser == null) {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
-        }else{
+        } else {
             user = loadUser()
         }
     }
@@ -131,7 +133,6 @@ class MainActivity : AppCompatActivity(), ProfileFragment.OnItemClickListener {
         sp.edit().clear().apply()
         Firebase.auth.signOut()
     }
-
 
 
 }

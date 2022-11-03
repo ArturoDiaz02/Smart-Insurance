@@ -19,7 +19,7 @@ class ObjectDetails : AppCompatActivity() {
         }
 
         binding.button2.setOnClickListener {
-                val intent = Intent(this, EditObject::class.java)
+            val intent = Intent(this, EditObject::class.java)
             startActivity(intent)
         }
     }

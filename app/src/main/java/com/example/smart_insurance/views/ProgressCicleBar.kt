@@ -5,10 +5,9 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.Gravity
 import androidx.fragment.app.DialogFragment
-import com.example.smart_insurance.databinding.DialogInputBinding
 import com.example.smart_insurance.databinding.ProgressBarBinding
 
-class ProgressCicleBar : DialogFragment()  {
+class ProgressCicleBar : DialogFragment() {
 
     private lateinit var binding: ProgressBarBinding
 

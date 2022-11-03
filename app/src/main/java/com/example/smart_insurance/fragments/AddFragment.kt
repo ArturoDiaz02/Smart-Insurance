@@ -17,7 +17,6 @@ import com.example.smart_insurance.model.User
 import com.example.smart_insurance.views.ProgressCicleBar
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.util.*
 import kotlin.collections.ArrayList
 
 class AddFragment(private val user: User) : Fragment(), CategoryAdapter.OnItemClickListener {
@@ -40,7 +39,7 @@ class AddFragment(private val user: User) : Fragment(), CategoryAdapter.OnItemCl
         Firebase.firestore.collection("categories").get().addOnCompleteListener { task ->
 
             if (task.isSuccessful) {
-                
+
                 for (document in task.result!!) {
                     val category = document.toObject(Category::class.java)
                     categories.add(category)
@@ -76,13 +75,14 @@ class AddFragment(private val user: User) : Fragment(), CategoryAdapter.OnItemCl
                 }
 
                 if (filteredList.isEmpty()) {
-                    Toast.makeText(activity, "No se encontraron resultados", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "No se encontraron resultados", Toast.LENGTH_SHORT)
+                        .show()
 
-                }else{
+                } else {
                     adapter.setFilter(filteredList)
                 }
 
-                if (newText == ""){
+                if (newText == "") {
                     adapter.setFilter(categories)
                 }
                 return true

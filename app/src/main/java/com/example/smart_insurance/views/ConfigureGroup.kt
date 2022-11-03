@@ -1,6 +1,5 @@
 package com.example.smart_insurance.views
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.smart_insurance.databinding.ActivityConfigureGroupBinding
@@ -13,8 +12,8 @@ class ConfigureGroup : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityConfigureGroupBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
-        binding.backButton.setOnClickListener{
+
+        binding.backButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
     }

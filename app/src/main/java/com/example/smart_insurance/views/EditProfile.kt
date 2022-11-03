@@ -17,7 +17,7 @@ import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import java.io.File
 
-class EditProfile: AppCompatActivity() {
+class EditProfile : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditProfileBinding
     private lateinit var user: User
@@ -42,8 +42,8 @@ class EditProfile: AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        binding.imageView5.setOnClickListener{
-            val intent = Intent(Intent.ACTION_PICK).also{
+        binding.imageView5.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK).also {
                 it.type = "image/*"
             }
 
@@ -56,7 +56,8 @@ class EditProfile: AppCompatActivity() {
     private fun onGalleryResult(result: ActivityResult) {
         if (result.resultCode == RESULT_OK) {
             val data: Intent? = result.data
-            Firebase.storage.reference.child("profileImages").child(user.profileImage!!).putFile(data?.data!!)
+            Firebase.storage.reference.child("profileImages").child(user.profileImage!!)
+                .putFile(data?.data!!)
 
             val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, data.data!!))
