@@ -1,22 +1,23 @@
 package com.example.smart_insurance.adapter
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestListener
 import com.example.smart_insurance.R
+import com.example.smart_insurance.model.Category
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
-class CategoryAdapter(private val itemClickListener: OnItemClickListener) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>(){
-
-    //private val categories = ArrayList<Category>()
-
-    private val id = arrayOf(0,1,2,3,4,5,6,7,8,9,10,11)
-    private val images = arrayOf(R.drawable.ic_baseline_menu_book_24, R.drawable.ic_baseline_laptop_24, R.drawable.ic_baseline_phone_iphone_24, R.drawable.ic_baseline_pets_24, R.drawable.ic_baseline_photo_camera_24,
-        R.drawable.ic_baseline_print_24, R.drawable.ic_baseline_radio_24, R.drawable.ic_baseline_tv_24, R.drawable.ic_baseline_videogame_asset_24, R.drawable.ic_baseline_watch_24, R.drawable.ic_baseline_mouse_24, R.drawable.ic_baseline_sports_basketball_24)
-    private val colors = arrayOf("#58FF27", "#58FF27","#58FF27", "#446CFF", "#446CFF", "#446CFF",  "#F80000", "#F80000", "#F80000", "#F6D200", "#F6D200", "#F6D200")
-    private val titles = arrayOf("Libros", "Computadoras", "Celulares", "Mascotas", "Cámaras", "Impresoras", "Radios", "Televisores", "Videojuegos", "Relojes", "Mouse", "Balones")
+class CategoryAdapter(
+    private val itemClickListener: OnItemClickListener,
+    private val categories: ArrayList<Category>
+) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.category_layout, parent, false)
@@ -24,24 +25,36 @@ class CategoryAdapter(private val itemClickListener: OnItemClickListener) : Recy
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
+        holder.bind(categories[position])
 
-        holder.image.setImageResource(images[position])
-        holder.layout.setBackgroundColor(android.graphics.Color.parseColor(colors[position]))
-        holder.title.text = titles[position]
+        if (position == categories.size - 1) {
+            itemClickListener.recyclerVisibility()
+        }
     }
 
     override fun getItemCount(): Int {
-        return colors.size
+        return categories.size
     }
 
     inner class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
-        var image: ImageView = itemView.findViewById(R.id.image_category)
-        var layout: View = itemView.findViewById(R.id.relativeLayoutCategory)
-        var title: TextView = itemView.findViewById(R.id.text_category)
+        private var image: ImageView = itemView.findViewById(R.id.image_category)
+        private var layout: View = itemView.findViewById(R.id.relativeLayoutCategory)
+        private var title: TextView = itemView.findViewById(R.id.text_category)
 
         init {
             itemView.setOnClickListener(this)
+        }
+
+        fun bind(category: Category){
+            title.text = category.name
+
+            Firebase.storage.reference.child("categoriesImages").child(category.image).downloadUrl.addOnSuccessListener {
+                Glide.with(image).load(it).into(image)
+            }
+
+            layout.setBackgroundColor(android.graphics.Color.parseColor(category.color))
+
         }
 
         override fun onClick(v: View?) {
@@ -54,6 +67,7 @@ class CategoryAdapter(private val itemClickListener: OnItemClickListener) : Recy
 
     interface OnItemClickListener{
         fun onItemClick(position: Int)
+        fun recyclerVisibility()
     }
 
 }

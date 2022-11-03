@@ -37,35 +37,40 @@ class LoginActivity : AppCompatActivity() {
         val sp = getSharedPreferences("smart_insurance", MODE_PRIVATE)
         val json = sp.getString("user", "NO_USER")
 
-        if(json != "NO_USER"){
+        if (json != "NO_USER") {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
 
-        binding.button.setOnClickListener{
+        binding.button.setOnClickListener {
             val progressBar = ProgressCicleBar()
             progressBar.show(supportFragmentManager, "progress")
             loginEmailPassword(progressBar)
         }
 
-        binding.button3.setOnClickListener{
+        binding.button3.setOnClickListener {
             loginGoogle()
         }
 
-        binding.button4.setOnClickListener{
+        binding.button4.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
 
-        binding.forgot.setOnClickListener{
+        binding.forgot.setOnClickListener {
             val dialog = EmailDialog { email ->
 
                 if (email.isNotEmpty()) {
                     Firebase.auth.sendPasswordResetEmail(email).addOnSuccessListener {
-                        Toast.makeText(this, "Se envio un correo para restablecer su contraseña", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            "Se envio un correo para restablecer su contraseña",
+                            Toast.LENGTH_SHORT
+                        ).show()
 
-                    }.addOnFailureListener{
-                        Toast.makeText(this, "No se pudo enviar el correo", Toast.LENGTH_SHORT).show()
+                    }.addOnFailureListener {
+                        Toast.makeText(this, "No se pudo enviar el correo", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 } else {
                     Toast.makeText(this, "Ingrese un correo", Toast.LENGTH_SHORT).show()
@@ -105,11 +110,12 @@ class LoginActivity : AppCompatActivity() {
 
                     )
 
-                    Firebase.firestore.collection("users").document(user.id).set(user).addOnSuccessListener {
-                        saveUser(user)
-                        goMain()
-                        finish()
-                    }
+                    Firebase.firestore.collection("users").document(user.id).set(user)
+                        .addOnSuccessListener {
+                            saveUser(user)
+                            goMain()
+                            finish()
+                        }
 
                     account.photoUrl?.let { it1 ->
                         Firebase.storage.reference.child("profile").child(filename).putFile(
@@ -117,7 +123,7 @@ class LoginActivity : AppCompatActivity() {
                         )
                     }
 
-                }.addOnFailureListener{
+                }.addOnFailureListener {
                     Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
                     progressBar.dismiss()
                 }
@@ -138,47 +144,49 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    private fun loginEmailPassword(progressBar: ProgressCicleBar){
+    private fun loginEmailPassword(progressBar: ProgressCicleBar) {
         val userName = binding.editTextTextPersonName2.text.toString()
         val password = binding.editTextTextPersonName3.text.toString()
 
-        if(userName.isNotEmpty() && password.isNotEmpty()){
-           Firebase.auth.signInWithEmailAndPassword(userName, password).addOnSuccessListener {
-               val fbUser = Firebase.auth.currentUser
+        if (userName.isNotEmpty() && password.isNotEmpty()) {
+            Firebase.auth.signInWithEmailAndPassword(userName, password).addOnSuccessListener {
+                val fbUser = Firebase.auth.currentUser
 
-               if(fbUser!!.isEmailVerified){
+                if (fbUser!!.isEmailVerified) {
 
-                    Firebase.firestore.collection("users").document(fbUser.uid).get().addOnSuccessListener {
-                        val user = it.toObject(User::class.java)
-                        saveUser(user!!)
-                        goMain()
-                        finish()
-                    }
+                    Firebase.firestore.collection("users").document(fbUser.uid).get()
+                        .addOnSuccessListener {
+                            val user = it.toObject(User::class.java)
+                            saveUser(user!!)
+                            goMain()
+                            finish()
+                        }
 
-               }else{
-                   Toast.makeText(this, "Please verify your email", Toast.LENGTH_SHORT).show()
-                   progressBar.dismiss()
-               }
+                } else {
+                    Toast.makeText(this, "Please verify your email", Toast.LENGTH_SHORT).show()
+                    progressBar.dismiss()
+                }
 
-           }.addOnFailureListener{
-               Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
-               progressBar.dismiss()
-           }
+            }.addOnFailureListener {
+                Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
+                progressBar.dismiss()
+            }
 
-        }else{
-            Toast.makeText(this, "Please enter your username and password", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Please enter your username and password", Toast.LENGTH_SHORT)
+                .show()
             progressBar.dismiss()
         }
 
     }
 
-    private fun saveUser(user: User){
+    private fun saveUser(user: User) {
         val sp = getSharedPreferences("smart_insurance", MODE_PRIVATE)
         val json = Gson().toJson(user)
         sp.edit().putString("user", json).apply()
     }
 
-    private fun goMain(){
+    private fun goMain() {
         startActivity(Intent(this, MainActivity::class.java))
     }
 }

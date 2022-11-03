@@ -88,12 +88,12 @@
             android:layout_marginTop="17dp"
             android:layout_marginEnd="15dp"
             android:layout_toEndOf="@+id/all"
+            android:isScrollContainer="true"
             app:layout_constraintBottom_toTopOf="@+id/last"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/all"
-            android:isScrollContainer="true"/>
+            app:layout_constraintTop_toBottomOf="@+id/all" />
 
 
         <TextView

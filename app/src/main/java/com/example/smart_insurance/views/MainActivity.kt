@@ -12,9 +12,12 @@ import com.example.smart_insurance.databinding.ActivityMainBinding
 import com.example.smart_insurance.fragments.AddFragment
 import com.example.smart_insurance.fragments.HomeFragment
 import com.example.smart_insurance.fragments.ProfileFragment
+import com.example.smart_insurance.model.Category
 import com.example.smart_insurance.model.User
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import java.io.File
 

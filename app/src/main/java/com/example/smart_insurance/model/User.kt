@@ -12,12 +12,12 @@ data class User(
     val profileImage: String? = null,
     val insurance: List<Insurance>? = null
 
-): Serializable {
+) : Serializable {
     override fun toString(): String {
         return super.toString()
     }
 
-    constructor(): this("","","","","","")
+    constructor() : this("", "", "", "", "", "")
 
 }
 
