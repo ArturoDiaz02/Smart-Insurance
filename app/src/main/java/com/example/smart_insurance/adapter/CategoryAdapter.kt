@@ -1,5 +1,6 @@
 package com.example.smart_insurance.adapter
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +17,7 @@ import com.google.firebase.storage.ktx.storage
 
 class CategoryAdapter(
     private val itemClickListener: OnItemClickListener,
-    private val categories: ArrayList<Category>
+    private var categories: ArrayList<Category>
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
@@ -34,6 +35,12 @@ class CategoryAdapter(
 
     override fun getItemCount(): Int {
         return categories.size
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setFilter(newList: ArrayList<Category>) {
+        this.categories = newList
+        notifyDataSetChanged()
     }
 
     inner class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
