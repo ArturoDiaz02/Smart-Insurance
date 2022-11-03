@@ -17,9 +17,13 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import com.example.smart_insurance.model.Category
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.storage.ktx.storage
+import com.google.gson.reflect.TypeToken
 import java.util.UUID
+
 
 
 class LoginActivity : AppCompatActivity() {
@@ -37,6 +41,7 @@ class LoginActivity : AppCompatActivity() {
 
         if (json != "NO_USER") {
             startActivity(Intent(this, MainActivity::class.java))
+            loadCategories()
             finish()
         }
 
@@ -82,54 +87,6 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    private val resultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
-        val progressBar = ProgressCicleBar()
-        progressBar.show(supportFragmentManager, "progress")
-
-        if (result.resultCode == Activity.RESULT_OK) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            val account = task.result
-
-            if (account != null) {
-                val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-
-                Firebase.auth.signInWithCredential(credential).addOnSuccessListener {
-
-                    val filename = UUID.randomUUID().toString()
-
-                    val user = User(
-                        Firebase.auth.currentUser?.uid.toString(),
-                        account.givenName!!,
-                        "",
-                        "00/00/0000",
-                        "",
-                        account.email!!,
-                        filename
-
-                    )
-
-                    Firebase.firestore.collection("users").document(user.id).set(user)
-                        .addOnSuccessListener {
-                            saveUser(user)
-                            goMain()
-                            finish()
-                        }
-
-                    account.photoUrl?.let { it1 ->
-                        Firebase.storage.reference.child("profile").child(filename).putFile(
-                            it1
-                        )
-                    }
-
-                }.addOnFailureListener {
-                    Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
-                    progressBar.dismiss()
-                }
-            }
-
-        }
-    }
-
     private fun loginGoogle() {
         val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -137,6 +94,55 @@ class LoginActivity : AppCompatActivity() {
             .build()
 
         val googleClient = GoogleSignIn.getClient(this, googleConf)
+
+        val resultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
+            val progressBar = ProgressCicleBar()
+            progressBar.show(supportFragmentManager, "progress")
+
+            if (result.resultCode == Activity.RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                val account = task.result
+
+                if (account != null) {
+                    val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+
+                    Firebase.auth.signInWithCredential(credential).addOnSuccessListener {
+
+                        val filename = UUID.randomUUID().toString()
+
+                        val user = User(
+                            Firebase.auth.currentUser?.uid.toString(),
+                            account.givenName!!,
+                            "",
+                            "00/00/0000",
+                            "",
+                            account.email!!,
+                            filename
+
+                        )
+
+                        Firebase.firestore.collection("users").document(user.id).set(user)
+                            .addOnSuccessListener {
+                                saveUser(user)
+                                loadCategories()
+                                goMain()
+                                finish()
+                            }
+
+                        account.photoUrl?.let { it1 ->
+                            Firebase.storage.reference.child("profile").child(filename).putFile(
+                                it1
+                            )
+                        }
+
+                    }.addOnFailureListener {
+                        Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
+                        progressBar.dismiss()
+                    }
+                }
+
+            }
+        }
 
         resultLauncher.launch(googleClient.signInIntent)
 
@@ -156,6 +162,7 @@ class LoginActivity : AppCompatActivity() {
                         .addOnSuccessListener {
                             val user = it.toObject(User::class.java)
                             saveUser(user!!)
+                            loadCategories()
                             goMain()
                             finish()
                         }
@@ -187,4 +194,51 @@ class LoginActivity : AppCompatActivity() {
     private fun goMain() {
         startActivity(Intent(this, MainActivity::class.java))
     }
+
+    private fun loadCategories(){
+
+        var categories = ArrayList<Category>()
+        val sp = getSharedPreferences("smart_insurance", MODE_PRIVATE)
+        var json = sp.getString("categories", "NO_CATEGORIES")
+
+        if (json != "NO_CATEGORIES"){
+            categories = Gson().fromJson(json, object : TypeToken<ArrayList<Category>>() {}.type)
+        }
+
+        Firebase.firestore.collection("categories").orderBy("id").addSnapshotListener{ value, error ->
+            for (change in value!!.documentChanges) {
+                when(change.type){
+                    DocumentChange.Type.ADDED -> {
+                        val category = change.document.toObject(Category::class.java)
+                        var validation = true
+
+                        categories.forEach {
+                            if (it.id == category.id){
+                                validation = false
+                            }
+                        }
+
+                        if (validation){
+                            categories.add(category)
+                        }
+                    }
+
+                    DocumentChange.Type.MODIFIED -> {
+                        val category = change.document.toObject(Category::class.java)
+                        categories[change.newIndex] = category
+                    }
+
+                    DocumentChange.Type.REMOVED -> {
+                        categories.removeAt(change.oldIndex)
+                    }
+                }
+            }
+
+            json = Gson().toJson(categories)
+            sp.edit().putString("categories", json).apply()
+
+        }
+
+    }
+
 }

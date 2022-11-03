@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.smart_insurance.views.CreateObject
@@ -15,8 +16,8 @@ import com.example.smart_insurance.databinding.FragmentAddBinding
 import com.example.smart_insurance.model.Category
 import com.example.smart_insurance.model.User
 import com.example.smart_insurance.views.ProgressCicleBar
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlin.collections.ArrayList
 
 class AddFragment(private val user: User) : Fragment(), CategoryAdapter.OnItemClickListener {
@@ -27,6 +28,7 @@ class AddFragment(private val user: User) : Fragment(), CategoryAdapter.OnItemCl
 
     private lateinit var adapter: CategoryAdapter
 
+    @Suppress("UNCHECKED_CAST")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,32 +36,20 @@ class AddFragment(private val user: User) : Fragment(), CategoryAdapter.OnItemCl
         _binding = FragmentAddBinding.inflate(inflater, container, false)
 
         progressBar.show(requireActivity().supportFragmentManager, "progress")
-        val categories = ArrayList<Category>()
 
-        Firebase.firestore.collection("categories").get().addOnCompleteListener { task ->
+        val sp = requireActivity().getSharedPreferences("smart_insurance", AppCompatActivity.MODE_PRIVATE)
+        val json = sp.getString("categories", "NO_CATEGORIES")
+        var categories = ArrayList<Category>()
+        categories = Gson().fromJson(json, object : TypeToken<ArrayList<Category>>() {}.type)
 
-            if (task.isSuccessful) {
+        adapter = CategoryAdapter(this, categories)
+        val recycler = binding.listViewCategories
+        recycler.visibility = View.INVISIBLE
+        recycler.setHasFixedSize(true)
+        recycler.layoutManager = GridLayoutManager(activity, 3)
+        recycler.adapter = adapter
 
-                for (document in task.result!!) {
-                    val category = document.toObject(Category::class.java)
-                    categories.add(category)
-                }
 
-                categories.sortBy { it.id }
-
-                adapter = CategoryAdapter(this, categories)
-                val recycler = binding.listViewCategories
-                recycler.visibility = View.INVISIBLE
-                recycler.setHasFixedSize(true)
-                recycler.layoutManager = GridLayoutManager(activity, 3)
-                recycler.adapter = adapter
-            }
-
-        }.addOnFailureListener { exception ->
-            progressBar.dismiss()
-            println("Error getting documents: $exception")
-
-        }
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {

@@ -13,23 +13,22 @@ import com.example.smart_insurance.model.Category
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
+
 class CategoryAdapter(
     private val itemClickListener: OnItemClickListener,
     private var categories: ArrayList<Category>
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
+    private var amount = 0
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.category_layout, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.category_layout, parent, false)
         return CategoryViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         holder.bind(categories[position])
 
-        if (position == categories.size - 1) {
-            itemClickListener.recyclerVisibility()
-        }
     }
 
     override fun getItemCount(): Int {
@@ -53,15 +52,20 @@ class CategoryAdapter(
             itemView.setOnClickListener(this)
         }
 
-        fun bind(category: Category) {
-            title.text = category.name
+        fun bind(category: Category){
 
             Firebase.storage.reference.child("categoriesImages")
                 .child(category.image).downloadUrl.addOnSuccessListener {
-                Glide.with(image).load(it).into(image)
-            }
+                    Glide.with(image).load(it).into(image)
+                    title.text = category.name
+                    layout.setBackgroundColor(android.graphics.Color.parseColor(category.color))
+                    amount += 1
 
-            layout.setBackgroundColor(android.graphics.Color.parseColor(category.color))
+                    if (amount == categories.size - 1) {
+                        itemClickListener.recyclerVisibility()
+                    }
+
+            }
 
         }
 
