@@ -1,21 +1,27 @@
-package com.example.smart_insurance.views
+package com.example.smart_insurance.dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.Gravity
 import androidx.fragment.app.DialogFragment
-import com.example.smart_insurance.databinding.ProgressBarBinding
+import com.example.smart_insurance.databinding.DialogInputBinding
 
-class ProgressCicleBar : DialogFragment() {
+class EmailDialog(private val onSubmitClick: (String) -> Unit) : DialogFragment() {
 
-    private lateinit var binding: ProgressBarBinding
+    private lateinit var binding: DialogInputBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = ProgressBarBinding.inflate(layoutInflater)
+        binding = DialogInputBinding.inflate(layoutInflater)
 
         val builder = AlertDialog.Builder(requireActivity())
         builder.setView(binding.root)
+
+
+        binding.bForgotEmail.setOnClickListener {
+            onSubmitClick(binding.setEmail.text.toString())
+            dismiss()
+        }
 
         val dialog = builder.create()
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
@@ -23,6 +29,4 @@ class ProgressCicleBar : DialogFragment() {
 
         return dialog
     }
-
-
 }

@@ -13,8 +13,6 @@ import com.example.smart_insurance.views.ConfigureGroup
 import com.example.smart_insurance.views.EditProfile
 import com.example.smart_insurance.databinding.FragmentProfileBinding
 import com.example.smart_insurance.model.User
-import java.io.File
-
 
 class ProfileFragment(private val user: User) : Fragment() {
 

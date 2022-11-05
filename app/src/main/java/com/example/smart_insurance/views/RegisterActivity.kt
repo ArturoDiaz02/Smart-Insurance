@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smart_insurance.databinding.ActivityRegisterBinding
+import com.example.smart_insurance.dialog.ProgressCycleBar
 import com.example.smart_insurance.fragments.DatePickerFragment
 import com.example.smart_insurance.model.User
 import com.google.firebase.auth.ktx.auth
@@ -26,7 +27,7 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         binding.button11.setOnClickListener {
-            val progressDialog = ProgressCicleBar()
+            val progressDialog = ProgressCycleBar()
             progressDialog.show(supportFragmentManager, "progress")
             val pass = binding.editTextTextPassword.text.toString()
             val passAux = binding.editTextTextPassword2.text.toString()
@@ -72,7 +73,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.editTextDate.setText("$day/$month/$year")
     }
 
-    private fun register(progressDialog: ProgressCicleBar) {
+    private fun register(progressDialog: ProgressCycleBar) {
 
         Firebase.auth.createUserWithEmailAndPassword(
             binding.editTextTextEmailAddress.text.toString(),

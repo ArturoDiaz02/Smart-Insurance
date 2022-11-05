@@ -91,13 +91,13 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="45dp"
             android:layout_marginEnd="15dp"
+            android:layout_marginBottom="40dp"
             android:layout_toEndOf="@+id/name"
+            android:isScrollContainer="true"
             app:layout_constraintBottom_toTopOf="@+id/last"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/this_is"
-            android:isScrollContainer="true"/>
+            app:layout_constraintTop_toBottomOf="@+id/this_is" />
 
         <TextView
             android:id="@+id/last"

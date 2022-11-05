@@ -6,11 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    cardView:cardCornerRadius="15dp"
     android:forceDarkAllowed="false"
+    cardView:cardBackgroundColor="#29CC00"
+    cardView:cardCornerRadius="15dp"
     cardView:cardElevation="10dp"
     cardView:contentPadding="1.25dp"
-    cardView:cardBackgroundColor="#29CC00"
     tools:targetApi="q">
 
 
@@ -30,20 +30,18 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginEnd="16dp"
-            android:forceDarkAllowed="false"
             android:background="@drawable/shape"
+            android:forceDarkAllowed="false"
             android:padding="10dp">
+
             <ImageView
                 android:id="@+id/image_card"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="@string/content_description_card_image"/>
-
+                android:contentDescription="@string/content_description_card_image" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
         <TextView
@@ -52,7 +50,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/relativeLayoutImage"
-            android:text="Don quijote edicion 1"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -64,13 +61,11 @@
             android:layout_below="@+id/title_card"
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@+id/relativeLayoutImage"
-            android:text="Prueba"
             android:textColor="@color/white"
             android:textSize="15sp"
             android:textStyle="bold" />
 
 
     </RelativeLayout>
-
 
 </androidx.cardview.widget.CardView>

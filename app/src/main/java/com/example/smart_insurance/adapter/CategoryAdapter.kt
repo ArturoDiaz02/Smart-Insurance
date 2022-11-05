@@ -22,7 +22,8 @@ class CategoryAdapter(
     private var amount = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.category_layout, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.category_layout, parent, false)
         return CategoryViewHolder(view)
     }
 
@@ -52,18 +53,18 @@ class CategoryAdapter(
             itemView.setOnClickListener(this)
         }
 
-        fun bind(category: Category){
+        fun bind(category: Category) {
 
             Firebase.storage.reference.child("categoriesImages")
                 .child(category.image).downloadUrl.addOnSuccessListener {
-                    Glide.with(image).load(it).into(image)
-                    title.text = category.name
-                    layout.setBackgroundColor(android.graphics.Color.parseColor(category.color))
-                    amount += 1
+                Glide.with(image).load(it).into(image)
+                title.text = category.name
+                layout.setBackgroundColor(android.graphics.Color.parseColor(category.color))
+                amount += 1
 
-                    if (amount == categories.size - 1) {
-                        itemClickListener.recyclerVisibility()
-                    }
+                if (amount == categories.size - 1) {
+                    itemClickListener.recyclerVisibility()
+                }
 
             }
 

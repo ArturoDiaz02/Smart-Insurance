@@ -9,8 +9,7 @@ data class User(
     val dateOfBirth: String,
     val cc: String,
     val email: String,
-    val profileImage: String? = null,
-    val insurance: List<Insurance>? = null
+    val profileImage: String? = null
 
 ) : Serializable {
     override fun toString(): String {

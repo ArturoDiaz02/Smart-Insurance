@@ -8,10 +8,7 @@ data class Insurance(
     val initDate: String,
     val endDate: String,
     val price: String,
-    val type: String,
     val description: String,
-    val image: String,
-    val idUser: String,
     val category: String,
     val state: String
 
@@ -20,5 +17,5 @@ data class Insurance(
         return super.toString()
     }
 
-    constructor() : this("", "", "", "", "", "", "", "", "", "", "")
+    constructor() : this("", "", "", "", "", "", "", "")
 }

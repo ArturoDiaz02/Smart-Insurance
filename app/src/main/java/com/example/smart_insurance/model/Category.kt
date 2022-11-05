@@ -6,13 +6,14 @@ data class Category(
     var id: String,
     var name: String,
     var image: String,
-    var color : String
+    var color : String,
+    var categoryName: String
 
 ) : Serializable {
     override fun toString(): String {
         return super.toString()
     }
 
-    constructor() : this("", "", "", "")
+    constructor() : this("", "", "", "", "")
 
 }
