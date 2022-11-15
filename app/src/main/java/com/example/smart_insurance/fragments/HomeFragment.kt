@@ -7,16 +7,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smart_insurance.views.ObjectDetails
 import com.example.smart_insurance.adapter.InsuranceAdapter
 import com.example.smart_insurance.databinding.FragmentHomeBinding
-import com.example.smart_insurance.model.Category
+import com.example.smart_insurance.db.SqlOpenHelper
 import com.example.smart_insurance.model.Insurance
 import com.example.smart_insurance.model.User
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 
 class HomeFragment(private val user: User) : Fragment(), InsuranceAdapter.OnItemClickListener {
 
@@ -24,6 +21,7 @@ class HomeFragment(private val user: User) : Fragment(), InsuranceAdapter.OnItem
     private val binding get() = _binding!!
 
     private lateinit var adapter: InsuranceAdapter
+    private lateinit var sqlOpenHelper: SqlOpenHelper
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -34,33 +32,16 @@ class HomeFragment(private val user: User) : Fragment(), InsuranceAdapter.OnItem
 
         binding.name.text = user.name + " " + user.lassName
 
-        var insurance = ArrayList<Insurance>()
-        var categories = ArrayList<Category>()
-
-        val sp = requireActivity().getSharedPreferences(
-            "smart_insurance",
-            AppCompatActivity.MODE_PRIVATE
-        )
-        var json = sp.getString("insurances", "NO_INSURANCES")
-
-        if (json != "NO_INSURANCES") {
-            insurance = Gson().fromJson(json, object : TypeToken<ArrayList<Insurance>>() {}.type)
-            json = sp.getString("categories", "NO_CATEGORIES")
-            categories = Gson().fromJson(json, object : TypeToken<ArrayList<Category>>() {}.type)
-        }
-
-        adapter = InsuranceAdapter(this, insurance, categories)
-        val recycler = binding.listView
-        recycler.setHasFixedSize(true)
-        recycler.layoutManager = LinearLayoutManager(activity)
-        recycler.adapter = adapter
+        sqlOpenHelper = SqlOpenHelper(requireContext())
+        setAdapter(sqlOpenHelper.getAllInsurances(), sqlOpenHelper.getCategoryOfInsurances())
 
         return binding.root
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        sqlOpenHelper.close()
         _binding = null
+        super.onDestroyView()
     }
 
     companion object {
@@ -72,6 +53,14 @@ class HomeFragment(private val user: User) : Fragment(), InsuranceAdapter.OnItem
     override fun onItemClick(position: Int) {
         val intent = Intent(this@HomeFragment.requireContext(), ObjectDetails::class.java)
         startActivity(intent)
+    }
+
+    private fun setAdapter(insurance: ArrayList<Insurance> , imageCategory: ArrayList<String>) {
+        adapter = InsuranceAdapter(this, insurance, imageCategory)
+        val recycler = binding.listView
+        recycler.setHasFixedSize(true)
+        recycler.layoutManager = LinearLayoutManager(activity)
+        recycler.adapter = adapter
     }
 
 }

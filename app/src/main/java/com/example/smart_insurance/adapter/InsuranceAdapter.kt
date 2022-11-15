@@ -10,15 +10,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.smart_insurance.R
-import com.example.smart_insurance.model.Category
 import com.example.smart_insurance.model.Insurance
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 
 class InsuranceAdapter(
     private val itemClickListener: OnItemClickListener,
     private val insurances: ArrayList<Insurance>,
-    private val category: ArrayList<Category>,
+    private val category: ArrayList<String>,
 
     ) : RecyclerView.Adapter<InsuranceAdapter.CardViewHolder>() {
 
@@ -28,7 +25,7 @@ class InsuranceAdapter(
     }
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
-        holder.bind(insurances[position], category)
+        holder.bind(insurances[position], category[position])
     }
 
     override fun getItemCount(): Int {
@@ -48,22 +45,14 @@ class InsuranceAdapter(
         }
 
         @SuppressLint("SetTextI18n")
-        fun bind(insurance: Insurance, category: ArrayList<Category>) {
+        fun bind(insurance: Insurance, categoryData: String) {
 
-            for(item in category){
+            val data = categoryData.split(",")
 
-                if (item.categoryName == insurance.category) {
-                    Firebase.storage.reference.child("categoriesImages")
-                        .child(item.image).downloadUrl.addOnSuccessListener { imageUri ->
-                            Glide.with(image).load(imageUri).into(image)
-                            title.text = insurance.name
-                            date.text = insurance.initDate + " - " + insurance.endDate
-                            layout.background.setTint(Color.parseColor(item.color))
-
-                        }
-                    break
-                }
-            }
+            Glide.with(image).load(data[0]).into(image)
+            title.text = insurance.name
+            date.text = insurance.initDate + " - " + insurance.endDate
+            layout.background.setTint(Color.parseColor(data[1]))
 
         }
 

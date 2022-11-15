@@ -20,6 +20,7 @@ class ProgressCycleBar : DialogFragment() {
         val dialog = builder.create()
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.window?.setGravity(Gravity.CENTER)
+        dialog.setCanceledOnTouchOutside(false)
 
         return dialog
     }

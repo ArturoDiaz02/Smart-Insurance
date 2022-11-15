@@ -1,6 +1,7 @@
 package com.example.smart_insurance.adapter
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,16 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.smart_insurance.R
 import com.example.smart_insurance.model.Category
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-
 
 class CategoryAdapter(
     private val itemClickListener: OnItemClickListener,
     private var categories: ArrayList<Category>
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
-
-    private var amount = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val view =
@@ -55,18 +51,9 @@ class CategoryAdapter(
 
         fun bind(category: Category) {
 
-            Firebase.storage.reference.child("categoriesImages")
-                .child(category.image).downloadUrl.addOnSuccessListener {
-                Glide.with(image).load(it).into(image)
-                title.text = category.name
-                layout.setBackgroundColor(android.graphics.Color.parseColor(category.color))
-                amount += 1
-
-                if (amount == categories.size - 1) {
-                    itemClickListener.recyclerVisibility()
-                }
-
-            }
+            Glide.with(image).load(category.image).into(image)
+            title.text = category.name
+            layout.setBackgroundColor(Color.parseColor(category.color))
 
         }
 
@@ -80,7 +67,6 @@ class CategoryAdapter(
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
-        fun recyclerVisibility()
     }
 
 }

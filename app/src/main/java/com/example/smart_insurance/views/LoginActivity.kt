@@ -1,47 +1,50 @@
 package com.example.smart_insurance.views
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.example.smart_insurance.R
 import com.example.smart_insurance.databinding.ActivityLoginBinding
-import com.example.smart_insurance.model.User
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import com.google.gson.Gson
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import com.example.smart_insurance.db.SqlOpenHelper
 import com.example.smart_insurance.dialog.EmailDialog
 import com.example.smart_insurance.dialog.ProgressCycleBar
 import com.example.smart_insurance.model.Category
 import com.example.smart_insurance.model.Insurance
+import com.example.smart_insurance.model.User
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.storage.ktx.storage
-import com.google.gson.reflect.TypeToken
-import java.util.UUID
-
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
+    private lateinit var user: User
+    private lateinit var sqlOpenHelper: SqlOpenHelper
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sqlOpenHelper = SqlOpenHelper(this)
 
         val sp = getSharedPreferences("smart_insurance", MODE_PRIVATE)
         val json = sp.getString("user", "NO_USER")
 
         if (json != "NO_USER") {
+            user = Gson().fromJson(json, User::class.java)
             loadCategories()
-            loadInsurance(Gson().fromJson(json, User::class.java))
+            loadInsurance()
 
         } else {
             binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -90,6 +93,48 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    private val resultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
+        val progressBar = ProgressCycleBar()
+        progressBar.show(supportFragmentManager, "progress")
+
+        if (result.resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            val account = task.result
+
+            if (account != null) {
+                val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+
+                Firebase.auth.signInWithCredential(credential).addOnSuccessListener {
+
+                    user = User(
+                        Firebase.auth.currentUser?.uid.toString(),
+                        account.givenName!!,
+                        "",
+                        "00/00/0000",
+                        "",
+                        account.email!!,
+                        account.photoUrl.toString()
+
+                    )
+
+                    Firebase.firestore.collection("users").document(user.id).set(user)
+                        .addOnSuccessListener {
+                            saveUser()
+                            loadCategories()
+                            loadInsurance()
+                        }
+
+                }.addOnFailureListener {
+                    Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
+                    progressBar.dismiss()
+                }
+            }
+
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun loginGoogle() {
         val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -98,58 +143,11 @@ class LoginActivity : AppCompatActivity() {
 
         val googleClient = GoogleSignIn.getClient(this, googleConf)
 
-        val resultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
-            val progressBar = ProgressCycleBar()
-            progressBar.show(supportFragmentManager, "progress")
-
-            if (result.resultCode == Activity.RESULT_OK) {
-                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-                val account = task.result
-
-                if (account != null) {
-                    val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-
-                    Firebase.auth.signInWithCredential(credential).addOnSuccessListener {
-
-                        val filename = UUID.randomUUID().toString()
-
-                        val user = User(
-                            Firebase.auth.currentUser?.uid.toString(),
-                            account.givenName!!,
-                            "",
-                            "00/00/0000",
-                            "",
-                            account.email!!,
-                            filename
-
-                        )
-
-                        Firebase.firestore.collection("users").document(user.id).set(user)
-                            .addOnSuccessListener {
-                                saveUser(user)
-                                loadCategories()
-                                loadInsurance(user)
-                            }
-
-                        account.photoUrl?.let { it1 ->
-                            Firebase.storage.reference.child("profile").child(filename).putFile(
-                                it1
-                            )
-                        }
-
-                    }.addOnFailureListener {
-                        Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
-                        progressBar.dismiss()
-                    }
-                }
-
-            }
-        }
-
         resultLauncher.launch(googleClient.signInIntent)
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun loginEmailPassword(progressBar: ProgressCycleBar) {
         val userName = binding.editTextTextPersonName2.text.toString()
         val password = binding.editTextTextPersonName3.text.toString()
@@ -162,10 +160,10 @@ class LoginActivity : AppCompatActivity() {
 
                     Firebase.firestore.collection("users").document(fbUser.uid).get()
                         .addOnSuccessListener {
-                            val user = it.toObject(User::class.java)!!
-                            saveUser(user)
+                            user = it.toObject(User::class.java)!!
+                            saveUser()
                             loadCategories()
-                            loadInsurance(user)
+                            loadInsurance()
 
                         }
 
@@ -187,7 +185,7 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    private fun saveUser(user: User) {
+    private fun saveUser() {
         val sp = getSharedPreferences("smart_insurance", MODE_PRIVATE)
         val json = Gson().toJson(user)
         sp.edit().putString("user", json).apply()
@@ -199,99 +197,55 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loadCategories() {
+        Firebase.firestore.collection("categories").orderBy("id").get().addOnSuccessListener {
 
-        var categories = ArrayList<Category>()
-        val sp = getSharedPreferences("smart_insurance", MODE_PRIVATE)
-        var json = sp.getString("categories", "NO_CATEGORIES")
+            for (document in it) {
+                val category = document.toObject(Category::class.java)
+                sqlOpenHelper.insert(category)
+            }
 
-        if (json != "NO_CATEGORIES") {
-            categories = Gson().fromJson(json, object : TypeToken<ArrayList<Category>>() {}.type)
         }
 
-        Firebase.firestore.collection("categories").orderBy("id")
-            .addSnapshotListener { value, _ ->
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun loadInsurance() {
+        val insurances = sqlOpenHelper.getAllInsurances()
+
+        Firebase.firestore.collection("insurance").document(user.id).collection("insurances")
+            .orderBy("id").addSnapshotListener { value, _ ->
                 for (change in value!!.documentChanges) {
                     when (change.type) {
                         DocumentChange.Type.ADDED -> {
-                            val category = change.document.toObject(Category::class.java)
+                            val insurance = change.document.toObject(Insurance::class.java)
                             var validation = true
 
-                            categories.forEach {
-                                if (it.id == category.id) {
+                            for (i in insurances) {
+                                if (i.id == insurance.id) {
                                     validation = false
                                 }
                             }
 
                             if (validation) {
-                                categories.add(category)
+                                sqlOpenHelper.insert(insurance)
                             }
+
                         }
 
                         DocumentChange.Type.MODIFIED -> {
-                            val category = change.document.toObject(Category::class.java)
-                            categories[change.newIndex] = category
+                            val insurance = change.document.toObject(Insurance::class.java)
+                            sqlOpenHelper.update(insurance)
                         }
 
                         DocumentChange.Type.REMOVED -> {
-                            categories.removeAt(change.oldIndex)
+                            val insurance = change.document.toObject(Insurance::class.java)
+                            sqlOpenHelper.delete(insurance)
                         }
                     }
                 }
 
-                json = Gson().toJson(categories)
-                sp.edit().putString("categories", json).apply()
+                goMain()
 
             }
-
     }
-
-    private fun loadInsurance(user: User) {
-
-        var insurances = ArrayList<Insurance>()
-        val sp = getSharedPreferences("smart_insurance", MODE_PRIVATE)
-        var json = sp.getString("insurances", "NO_INSURANCES")
-
-        if (json != "NO_INSURANCES") {
-            insurances = Gson().fromJson(json, object : TypeToken<ArrayList<Insurance>>() {}.type)
-        }
-
-        Firebase.firestore.collection("insurance").document(user.id).collection("insurances")
-            .orderBy("id").addSnapshotListener { value, _ ->
-            for (change in value!!.documentChanges) {
-                when (change.type) {
-                    DocumentChange.Type.ADDED -> {
-                        val insurance = change.document.toObject(Insurance::class.java)
-                        var validation = true
-
-                        insurances.forEach {
-                            if (it.id == insurance.id) {
-                                validation = false
-                            }
-                        }
-
-                        if (validation) {
-                            insurances.add(insurance)
-                        }
-                    }
-
-                    DocumentChange.Type.MODIFIED -> {
-                        val category = change.document.toObject(Insurance::class.java)
-                        insurances[change.newIndex] = category
-                    }
-
-                    DocumentChange.Type.REMOVED -> {
-                        insurances.removeAt(change.oldIndex)
-                    }
-                }
-            }
-
-            json = Gson().toJson(insurances)
-            sp.edit().putString("insurances", json).apply()
-
-            goMain()
-
-        }
-
-    }
-
 }

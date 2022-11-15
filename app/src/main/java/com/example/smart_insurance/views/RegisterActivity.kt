@@ -80,8 +80,6 @@ class RegisterActivity : AppCompatActivity() {
             binding.editTextTextPassword.text.toString()
 
         ).addOnSuccessListener {
-            val filename = UUID.randomUUID().toString()
-
             val user = User(
                 Firebase.auth.currentUser?.uid.toString(),
                 binding.editTextTextPersonName4.text.toString(),
@@ -89,7 +87,7 @@ class RegisterActivity : AppCompatActivity() {
                 binding.editTextDate.text.toString(),
                 binding.editTextNumber.text.toString(),
                 binding.editTextTextEmailAddress.text.toString(),
-                filename
+                ""
             )
 
             Firebase.firestore.collection("users").document(user.id).set(user)

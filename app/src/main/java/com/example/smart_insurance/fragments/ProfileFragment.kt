@@ -9,12 +9,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.example.smart_insurance.views.ConfigureGroup
 import com.example.smart_insurance.views.EditProfile
 import com.example.smart_insurance.databinding.FragmentProfileBinding
 import com.example.smart_insurance.model.User
+import com.google.gson.Gson
 
-class ProfileFragment(private val user: User) : Fragment() {
+class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
@@ -27,15 +30,19 @@ class ProfileFragment(private val user: User) : Fragment() {
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
+        val sp = requireActivity().getSharedPreferences("smart_insurance", AppCompatActivity.MODE_PRIVATE)
+        val json = sp.getString("user", "NO_USER")
+        val user = Gson().fromJson(json, User::class.java)
+
         binding.textView6.text = user.name + " " + user.lassName
 
-        var path = this.context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.path
-        path += "/${user.profileImage}.jpg"
+        val path = user.profileImage
 
-        val uri = Uri.parse(path)
+        if (path != "") {
+            Glide.with(binding.imageView3)
+                .load(path)
+                .into(binding.imageView3)
 
-        if (uri != null) {
-            binding.imageView3.setImageURI(uri)
         }
 
         binding.button5.setOnClickListener {
@@ -62,7 +69,7 @@ class ProfileFragment(private val user: User) : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(user: User) = ProfileFragment(user)
+        fun newInstance() = ProfileFragment()
     }
 
     interface OnItemClickListener {

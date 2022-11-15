@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.smart_insurance.R
 import com.example.smart_insurance.databinding.ActivityMainBinding
+import com.example.smart_insurance.db.SqlOpenHelper
 import com.example.smart_insurance.fragments.AddFragment
 import com.example.smart_insurance.fragments.HomeFragment
 import com.example.smart_insurance.fragments.ProfileFragment
@@ -28,8 +29,10 @@ class MainActivity : AppCompatActivity(), ProfileFragment.OnItemClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         login()
+
         binding.bottomNavigationView.background = null
         binding.bottomNavigationView.menu.getItem(0).isChecked = true
+
         itemEnable(false)
         setFragment(HomeFragment.newInstance(user))
 
@@ -43,7 +46,7 @@ class MainActivity : AppCompatActivity(), ProfileFragment.OnItemClickListener {
                     true
                 }
                 R.id.menu_item_profile -> {
-                    val fragment = ProfileFragment.newInstance(user)
+                    val fragment = ProfileFragment.newInstance()
                     fragment.setListener(this)
                     setFragment(fragment)
                     binding.floatingActionButton.show()
@@ -127,6 +130,7 @@ class MainActivity : AppCompatActivity(), ProfileFragment.OnItemClickListener {
     }
 
     override fun logOut() {
+        SqlOpenHelper(this).clean()
         finish()
         startActivity(Intent(this, LoginActivity::class.java))
         val sp = getSharedPreferences("smart_insurance", MODE_PRIVATE)
