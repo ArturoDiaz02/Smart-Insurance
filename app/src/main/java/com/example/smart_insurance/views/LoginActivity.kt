@@ -1,11 +1,10 @@
 package com.example.smart_insurance.views
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.annotation.RequiresApi
@@ -25,6 +24,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.gson.Gson
 
 class LoginActivity : AppCompatActivity() {
@@ -45,6 +45,14 @@ class LoginActivity : AppCompatActivity() {
             user = Gson().fromJson(json, User::class.java)
             loadCategories()
             loadInsurance()
+            object: CountDownTimer(2000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                }
+
+                override fun onFinish() {
+                   goMain()
+                }
+            }.start()
 
         } else {
             binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -54,10 +62,26 @@ class LoginActivity : AppCompatActivity() {
                 val progressBar = ProgressCycleBar()
                 progressBar.show(supportFragmentManager, "progress")
                 loginEmailPassword(progressBar)
+                object: CountDownTimer(4000, 1000) {
+                    override fun onTick(millisUntilFinished: Long) {
+                    }
+
+                    override fun onFinish() {
+                        goMain()
+                    }
+                }.start()
             }
 
             binding.button3.setOnClickListener {
                 loginGoogle()
+                object: CountDownTimer(4000, 1000) {
+                    override fun onTick(millisUntilFinished: Long) {
+                    }
+
+                    override fun onFinish() {
+                        goMain()
+                    }
+                }.start()
             }
 
             binding.button4.setOnClickListener {
@@ -107,23 +131,39 @@ class LoginActivity : AppCompatActivity() {
 
                 Firebase.auth.signInWithCredential(credential).addOnSuccessListener {
 
-                    user = User(
-                        Firebase.auth.currentUser?.uid.toString(),
-                        account.givenName!!,
-                        "",
-                        "00/00/0000",
-                        "",
-                        account.email!!,
-                        account.photoUrl.toString()
+                    if(validationEmail(account.email.toString())) {
 
-                    )
+                        user = User(
+                            Firebase.auth.currentUser?.uid.toString(),
+                            account.givenName!!,
+                            "",
+                            "00/00/0000",
+                            "",
+                            account.email!!,
+                            account.photoUrl.toString()
 
-                    Firebase.firestore.collection("users").document(user.id).set(user)
-                        .addOnSuccessListener {
-                            saveUser()
-                            loadCategories()
-                            loadInsurance()
-                        }
+                        )
+
+                        Firebase.firestore.collection("users").document(user.id).set(user)
+                            .addOnSuccessListener {
+                                saveUser(user)
+                                loadCategories()
+                                loadInsurance()
+                            }
+
+                    } else {
+                        Firebase.firestore.collection("users").whereEqualTo("email", account.email)
+                            .get().addOnSuccessListener { result ->
+                                result.documents[0].toObject(User::class.java)?.let { it1 ->
+                                    saveUser(it1)
+                                    loadCategories()
+                                    loadInsurance()
+                                }
+
+                            }
+                    }
+
+
 
                 }.addOnFailureListener {
                     Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
@@ -152,7 +192,8 @@ class LoginActivity : AppCompatActivity() {
         val userName = binding.editTextTextPersonName2.text.toString()
         val password = binding.editTextTextPersonName3.text.toString()
 
-        if (userName.isNotEmpty() && password.isNotEmpty()) {
+        if (userName.isNotEmpty() && password.isNotEmpty() && !validationEmail(userName)) {
+
             Firebase.auth.signInWithEmailAndPassword(userName, password).addOnSuccessListener {
                 val fbUser = Firebase.auth.currentUser
 
@@ -161,7 +202,7 @@ class LoginActivity : AppCompatActivity() {
                     Firebase.firestore.collection("users").document(fbUser.uid).get()
                         .addOnSuccessListener {
                             user = it.toObject(User::class.java)!!
-                            saveUser()
+                            saveUser(user)
                             loadCategories()
                             loadInsurance()
 
@@ -178,14 +219,14 @@ class LoginActivity : AppCompatActivity() {
             }
 
         } else {
-            Toast.makeText(this, "Please enter your username and password", Toast.LENGTH_SHORT)
+            Toast.makeText(this, "Please enter your username and password or email already exist", Toast.LENGTH_SHORT)
                 .show()
             progressBar.dismiss()
         }
 
     }
 
-    private fun saveUser() {
+    private fun saveUser(user: User) {
         val sp = getSharedPreferences("smart_insurance", MODE_PRIVATE)
         val json = Gson().toJson(user)
         sp.edit().putString("user", json).apply()
@@ -197,11 +238,28 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loadCategories() {
-        Firebase.firestore.collection("categories").orderBy("id").get().addOnSuccessListener {
 
-            for (document in it) {
-                val category = document.toObject(Category::class.java)
-                sqlOpenHelper.insert(category)
+        val sp = getSharedPreferences("smart_insurance", MODE_PRIVATE)
+        val localVersion = sp.getString("vCategories", "0.0")!!.toDouble()
+
+        Firebase.remoteConfig.fetchAndActivate().addOnSuccessListener {
+
+            val remoteVersion =
+                Firebase.remoteConfig.getString("CATEGORY_DATABASE_VERSION").toDouble()
+
+            if (remoteVersion > localVersion) {
+                Firebase.firestore.collection("categories").orderBy("id").get()
+                    .addOnSuccessListener {
+                        sqlOpenHelper.queryToTable("DELETE FROM CATEGORIES")
+
+                        for (document in it) {
+                            val category = document.toObject(Category::class.java)
+                            sqlOpenHelper.insert(category)
+                        }
+
+                    }
+
+                sp.edit().putString("vCategories", remoteVersion.toString()).apply()
             }
 
         }
@@ -244,8 +302,17 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
 
-                goMain()
-
             }
+    }
+
+    private fun validationEmail(email: String): Boolean{
+
+        var validation = false
+
+        Firebase.auth.fetchSignInMethodsForEmail(email).addOnSuccessListener {
+            validation = it.signInMethods!!.isNotEmpty()
+        }
+
+        return validation
     }
 }

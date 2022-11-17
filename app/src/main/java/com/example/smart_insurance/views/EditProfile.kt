@@ -1,25 +1,18 @@
 package com.example.smart_insurance.views
 
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
-import android.net.Uri
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.activity.result.PickVisualMediaRequest
 import com.bumptech.glide.Glide
 import com.example.smart_insurance.R
 import com.example.smart_insurance.databinding.ActivityEditProfileBinding
 import com.example.smart_insurance.model.User
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import java.io.File
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 
 class EditProfile : AppCompatActivity() {
 
@@ -33,13 +26,6 @@ class EditProfile : AppCompatActivity() {
         setContentView(binding.root)
         user = loadUser()
 
-        val resultLauncher = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            registerForActivityResult(StartActivityForResult(), ::onGalleryResult)
-        } else {
-            TODO("VERSION.SDK_INT < P")
-        }
-
-
         binding.imageView5.setImageResource(R.drawable.addimg)
 
         binding.imageButton3.setOnClickListener {
@@ -47,22 +33,18 @@ class EditProfile : AppCompatActivity() {
         }
 
         binding.imageView5.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK).also {
-                it.type = "image/*"
-            }
+            pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
 
-            resultLauncher.launch(intent)
         }
 
     }
 
+    private val pickMedia = registerForActivityResult(PickVisualMedia()){
 
-    private fun onGalleryResult(result: ActivityResult) {
-        if (result.resultCode == RESULT_OK) {
-            val data: Intent? = result.data
+        if (it != null){
 
             Firebase.storage.reference.child("profileImages").child(user.id)
-                .putFile(data?.data!!).addOnSuccessListener {
+                .putFile(it).addOnSuccessListener {
                     Firebase.storage.reference.child("profileImages").child(user.id)
                         .downloadUrl.addOnSuccessListener { image ->
                             Firebase.firestore.collection("users").document(user.id).update("profileImage", image.toString())

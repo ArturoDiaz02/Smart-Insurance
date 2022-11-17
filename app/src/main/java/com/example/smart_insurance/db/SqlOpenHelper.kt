@@ -67,9 +67,9 @@ class SqlOpenHelper(
         onUpgrade(db, oldVersion, newVersion)
     }
 
-    fun clean() {
+    fun queryToTable(query: String) {
         val db = writableDatabase
-        db.execSQL("DELETE FROM $TABLE_NAME_INSURANCES")
+        db.execSQL(query)
     }
 
     fun insert(category: Category) {

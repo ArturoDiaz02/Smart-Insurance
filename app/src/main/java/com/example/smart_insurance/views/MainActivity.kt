@@ -21,7 +21,7 @@ import com.google.gson.Gson
 class MainActivity : AppCompatActivity(), ProfileFragment.OnItemClickListener {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var user: User
+    private var user: User? = null
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,13 +34,13 @@ class MainActivity : AppCompatActivity(), ProfileFragment.OnItemClickListener {
         binding.bottomNavigationView.menu.getItem(0).isChecked = true
 
         itemEnable(false)
-        setFragment(HomeFragment.newInstance(user))
+        setFragment(HomeFragment.newInstance(user!!))
 
 
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.menu_item_Home -> {
-                    setFragment(HomeFragment.newInstance(user))
+                    setFragment(HomeFragment.newInstance(user!!))
                     binding.floatingActionButton.show()
                     itemEnable(false)
                     true
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(), ProfileFragment.OnItemClickListener {
         }
 
         binding.floatingActionButton.setOnClickListener {
-            setFragment(AddFragment.newInstance(user))
+            setFragment(AddFragment.newInstance(user!!))
             binding.floatingActionButton.hide()
             binding.bottomNavigationView.menu.getItem(1).isChecked = true
             itemEnable(true)
@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity(), ProfileFragment.OnItemClickListener {
     }
 
     override fun logOut() {
-        SqlOpenHelper(this).clean()
+        SqlOpenHelper(this).queryToTable("DELETE FROM INSURANCES")
         finish()
         startActivity(Intent(this, LoginActivity::class.java))
         val sp = getSharedPreferences("smart_insurance", MODE_PRIVATE)
