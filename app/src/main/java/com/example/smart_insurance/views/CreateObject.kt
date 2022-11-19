@@ -20,6 +20,9 @@ class CreateObject : AppCompatActivity() {
     private var idImageView by Delegates.notNull<Int>()
     private var imageArray = ArrayList<Uri>()
 
+    val profileName = intent.getStringExtra("Username")
+    val category = intent.getIntExtra("position", 0)
+
     private val launcher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {

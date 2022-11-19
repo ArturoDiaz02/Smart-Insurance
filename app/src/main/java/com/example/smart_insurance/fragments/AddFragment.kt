@@ -115,6 +115,7 @@ class AddFragment(private val user: User) : Fragment(), CategoryAdapter.OnItemCl
 
         if (networkInfo != null) {
             val intent = Intent(this@AddFragment.requireContext(), CreateObject::class.java)
+            intent.putExtra("position",position)
             startActivity(intent)
 
         } else {
