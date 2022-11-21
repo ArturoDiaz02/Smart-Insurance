@@ -87,7 +87,8 @@ class RegisterActivity : AppCompatActivity() {
                 binding.editTextDate.text.toString(),
                 binding.editTextNumber.text.toString(),
                 binding.editTextTextEmailAddress.text.toString(),
-                ""
+                "",
+                0
             )
 
             Firebase.firestore.collection("users").document(user.id).set(user)

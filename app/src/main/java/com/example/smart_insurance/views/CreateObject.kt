@@ -11,6 +11,17 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import com.example.smart_insurance.databinding.ActivityCreateObjectBinding
+import com.example.smart_insurance.dialog.ProgressCycleBar
+import com.example.smart_insurance.model.Category
+import com.example.smart_insurance.model.Insurance
+import com.example.smart_insurance.model.User
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.UUID
 import kotlin.properties.Delegates
 
 class CreateObject : AppCompatActivity() {
@@ -19,9 +30,8 @@ class CreateObject : AppCompatActivity() {
     private lateinit var imageUri: Uri
     private var idImageView by Delegates.notNull<Int>()
     private var imageArray = ArrayList<Uri>()
-
-    val profileName = intent.getStringExtra("Username")
-    val category = intent.getIntExtra("position", 0)
+    private val progressBar = ProgressCycleBar()
+    private var amount = 0
 
     private val launcher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -40,11 +50,16 @@ class CreateObject : AppCompatActivity() {
             }
         }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreateObjectBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.createBtn.setOnClickListener {
+            progressBar.show(supportFragmentManager, "progress")
+            createData()
+
+        }
 
         binding.imageButton2.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -86,5 +101,96 @@ class CreateObject : AppCompatActivity() {
         )!!
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
         launcher.launch(intent)
+    }
+
+    private fun createData() {
+
+        if (imageArray.size == 5 &&
+            binding.editTextTextPersonName.text.isNotEmpty() &&
+            binding.editTextPrice.text.isNotEmpty()
+        ) {
+            Firebase.firestore.collection("categories")
+                .whereEqualTo("id", intent.getIntExtra("position", -1)).get()
+                .addOnSuccessListener { result ->
+                    val category = result.documents[0].toObject(Category::class.java)
+
+                    Firebase.storage.reference.child("categoriesImages").child(category!!.image).downloadUrl.addOnSuccessListener { image ->
+
+                        val initDate = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            LocalDateTime.now()
+                        } else {
+                            TODO("VERSION.SDK_INT < O")
+                        }
+
+                        val endDate = initDate.plusDays(30)
+
+                        var insuranceImages = ""
+                        val userId = intent.getStringExtra("userId")!!
+
+                        imageArray.forEach { uri ->
+                            val uuid = UUID.randomUUID()
+                            val storageRef = Firebase.storage.reference.child("insurancesImages").child(userId).child("$uuid.jpg")
+                            storageRef.putFile(uri).addOnSuccessListener {
+                                storageRef.downloadUrl.addOnSuccessListener { uri ->
+                                    insuranceImages += "$uri,"
+                                    amount++
+
+                                    if(amount == imageArray.size){
+                                        createInsurance(initDate, endDate, category, image.toString(), insuranceImages, userId)
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+
+                }
+
+        }else{
+            progressBar.dismiss()
+            Toast.makeText(this, "Rellena todos los campos", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createInsurance(initDate: LocalDateTime, endDate: LocalDateTime, category: Category, image: String, insuranceImages: String, userId: String) {
+
+        Firebase.firestore.collection("users").document(userId).get().addOnSuccessListener {
+            val user = it.toObject(User::class.java)!!
+
+            val insurance = Insurance(
+                user.totalInsurance,
+                binding.editTextTextPersonName.text.toString(),
+                initDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                endDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                binding.editTextPrice.text.toString(),
+                "Pendiente",
+                category.id,
+                image,
+                category.color,
+                insuranceImages,
+                "true"
+            )
+
+            Firebase.firestore.collection("insurances").document(userId).collection("insurances").document(
+                insurance.id.toString()
+            ).set(insurance)
+                .addOnSuccessListener {
+                    Firebase.firestore.collection("users").document(userId).update("totalInsurance", user.totalInsurance + 1)
+                        .addOnSuccessListener {
+                            progressBar.dismiss()
+                            Toast.makeText(this, "Asegurado creado", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+
+                }
+                .addOnFailureListener {
+                    progressBar.dismiss()
+                    Toast.makeText(this, "Error al crear el asegurado", Toast.LENGTH_SHORT).show()
+                }
+        }
+
+
     }
 }

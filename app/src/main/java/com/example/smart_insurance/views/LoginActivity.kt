@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.annotation.RequiresApi
@@ -14,7 +13,6 @@ import com.example.smart_insurance.databinding.ActivityLoginBinding
 import com.example.smart_insurance.db.SqlOpenHelper
 import com.example.smart_insurance.dialog.EmailDialog
 import com.example.smart_insurance.dialog.ProgressCycleBar
-import com.example.smart_insurance.model.Category
 import com.example.smart_insurance.model.Insurance
 import com.example.smart_insurance.model.User
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -24,7 +22,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.gson.Gson
 
 class LoginActivity : AppCompatActivity() {
@@ -43,16 +40,12 @@ class LoginActivity : AppCompatActivity() {
 
         if (json != "NO_USER") {
             user = Gson().fromJson(json, User::class.java)
-            loadCategories()
-            loadInsurance()
-            object: CountDownTimer(2000, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                }
 
-                override fun onFinish() {
-                   goMain()
-                }
-            }.start()
+            Firebase.firestore.collection("users").document(user.id).get().addOnSuccessListener { result ->
+                user = result.toObject(User::class.java)!!
+                saveUser(user)
+                loadInsurance()
+            }
 
         } else {
             binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -62,26 +55,11 @@ class LoginActivity : AppCompatActivity() {
                 val progressBar = ProgressCycleBar()
                 progressBar.show(supportFragmentManager, "progress")
                 loginEmailPassword(progressBar)
-                object: CountDownTimer(4000, 1000) {
-                    override fun onTick(millisUntilFinished: Long) {
-                    }
 
-                    override fun onFinish() {
-                        goMain()
-                    }
-                }.start()
             }
 
             binding.button3.setOnClickListener {
                 loginGoogle()
-                object: CountDownTimer(4000, 1000) {
-                    override fun onTick(millisUntilFinished: Long) {
-                    }
-
-                    override fun onFinish() {
-                        goMain()
-                    }
-                }.start()
             }
 
             binding.button4.setOnClickListener {
@@ -131,7 +109,7 @@ class LoginActivity : AppCompatActivity() {
 
                 Firebase.auth.signInWithCredential(credential).addOnSuccessListener {
 
-                    if(validationEmail(account.email.toString())) {
+                    if(!validationEmail(account.email.toString())) {
 
                         user = User(
                             Firebase.auth.currentUser?.uid.toString(),
@@ -140,14 +118,14 @@ class LoginActivity : AppCompatActivity() {
                             "00/00/0000",
                             "",
                             account.email!!,
-                            account.photoUrl.toString()
+                            account.photoUrl.toString(),
+                            0
 
                         )
 
                         Firebase.firestore.collection("users").document(user.id).set(user)
                             .addOnSuccessListener {
                                 saveUser(user)
-                                loadCategories()
                                 loadInsurance()
                             }
 
@@ -156,7 +134,6 @@ class LoginActivity : AppCompatActivity() {
                             .get().addOnSuccessListener { result ->
                                 result.documents[0].toObject(User::class.java)?.let { it1 ->
                                     saveUser(it1)
-                                    loadCategories()
                                     loadInsurance()
                                 }
 
@@ -203,7 +180,6 @@ class LoginActivity : AppCompatActivity() {
                         .addOnSuccessListener {
                             user = it.toObject(User::class.java)!!
                             saveUser(user)
-                            loadCategories()
                             loadInsurance()
 
                         }
@@ -237,41 +213,11 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun loadCategories() {
-
-        val sp = getSharedPreferences("smart_insurance", MODE_PRIVATE)
-        val localVersion = sp.getString("vCategories", "0.0")!!.toDouble()
-
-        Firebase.remoteConfig.fetchAndActivate().addOnSuccessListener {
-
-            val remoteVersion =
-                Firebase.remoteConfig.getString("CATEGORY_DATABASE_VERSION").toDouble()
-
-            if (remoteVersion > localVersion) {
-                Firebase.firestore.collection("categories").orderBy("id").get()
-                    .addOnSuccessListener {
-                        sqlOpenHelper.queryToTable("DELETE FROM CATEGORIES")
-
-                        for (document in it) {
-                            val category = document.toObject(Category::class.java)
-                            sqlOpenHelper.insert(category)
-                        }
-
-                    }
-
-                sp.edit().putString("vCategories", remoteVersion.toString()).apply()
-            }
-
-        }
-
-    }
-
     @RequiresApi(Build.VERSION_CODES.M)
     private fun loadInsurance() {
         val insurances = sqlOpenHelper.getAllInsurances()
 
-        Firebase.firestore.collection("insurance").document(user.id).collection("insurances")
-            .orderBy("id").addSnapshotListener { value, _ ->
+        Firebase.firestore.collection("insurances").document(user.id).collection("insurances").addSnapshotListener { value, _ ->
                 for (change in value!!.documentChanges) {
                     when (change.type) {
                         DocumentChange.Type.ADDED -> {
@@ -301,6 +247,8 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
                 }
+
+                goMain()
 
             }
     }

@@ -5,7 +5,6 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.smart_insurance.model.Category
 import com.example.smart_insurance.model.Insurance
 
 class SqlOpenHelper(
@@ -23,18 +22,6 @@ class SqlOpenHelper(
         const val DATABASE_NAME = "smart_insurance.db"
         const val DATABASE_VERSION = 1
 
-        private const val TABLE_NAME_CATEGORIES = "CATEGORIES"
-        const val SQL_CREATE_ENTRIES_CATEGORIES =
-            "CREATE TABLE $TABLE_NAME_CATEGORIES (" +
-                    "ID INTEGER PRIMARY KEY," +
-                    "NAME TEXT," +
-                    "IMAGE TEXT," +
-                    "COLOR TEXT," +
-                    "CATEGORY_NAME TEXT)"
-
-        const val SQL_DELETE_ENTRIES_CATEGORIES = "DROP TABLE IF EXISTS $TABLE_NAME_CATEGORIES"
-
-
         private const val TABLE_NAME_INSURANCES = "INSURANCES"
         const val SQL_CREATE_ENTRIES_INSURANCES =
             "CREATE TABLE $TABLE_NAME_INSURANCES (" +
@@ -45,21 +32,21 @@ class SqlOpenHelper(
                     "PRICE TEXT," +
                     "DESCRIPTION TEXT," +
                     "CATEGORY INTEGER," +
-                    "STATE TEXT," +
-                    "FOREIGN KEY (CATEGORY) REFERENCES $TABLE_NAME_CATEGORIES(ID))"
+                    "CATEGORY_IMAGE TEXT," +
+                    "CATEGORY_COLOR TEXT," +
+                    "IMAGES TEXT," +
+                    "STATE TEXT)"
 
         const val SQL_DELETE_ENTRIES_INSURANCES = "DROP TABLE IF EXISTS $TABLE_NAME_INSURANCES"
 
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        db!!.execSQL(SQL_CREATE_ENTRIES_CATEGORIES)
-        db.execSQL(SQL_CREATE_ENTRIES_INSURANCES)
+        db!!.execSQL(SQL_CREATE_ENTRIES_INSURANCES)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        db!!.execSQL(SQL_DELETE_ENTRIES_CATEGORIES)
-        db.execSQL(SQL_DELETE_ENTRIES_INSURANCES)
+        db!!.execSQL(SQL_DELETE_ENTRIES_INSURANCES)
         onCreate(db)
     }
 
@@ -72,20 +59,8 @@ class SqlOpenHelper(
         db.execSQL(query)
     }
 
-    fun insert(category: Category) {
-        val db = writableDatabase
-        val values = ContentValues().apply {
-            put("ID", category.id)
-            put("NAME", category.name)
-            put("IMAGE", category.image)
-            put("COLOR", category.color)
-            put("CATEGORY_NAME", category.categoryName)
-        }
-        db.insert(TABLE_NAME_CATEGORIES, null, values)
-        db.close()
-    }
-
     fun insert(insurance: Insurance) {
+
         val db = writableDatabase
         val values = ContentValues().apply {
             put("ID", insurance.id)
@@ -95,41 +70,14 @@ class SqlOpenHelper(
             put("PRICE", insurance.price)
             put("DESCRIPTION", insurance.description)
             put("CATEGORY", insurance.category)
+            put("CATEGORY_IMAGE", insurance.category_image)
+            put("CATEGORY_COLOR", insurance.category_color)
+            put("IMAGES", insurance.images.split(",")[0])
             put("STATE", insurance.state)
         }
         db.insert(TABLE_NAME_INSURANCES, null, values)
         db.close()
     }
-
-
-    fun getAllCategories(): ArrayList<Category> {
-        val categories = ArrayList<Category>()
-        val db = readableDatabase
-        val cursor: Cursor?
-
-        try {
-            cursor = db.rawQuery("SELECT * FROM $TABLE_NAME_CATEGORIES", null)
-        } catch (e: Exception) {
-            return categories
-        }
-
-
-        if (cursor.moveToFirst()) {
-            do {
-                val id = cursor.getString(0)
-                val name = cursor.getString(1)
-                val image = cursor.getString(2)
-                val color = cursor.getString(3)
-                val categoryName = cursor.getString(4)
-                categories.add(Category(id, name, image, color, categoryName))
-            } while (cursor.moveToNext())
-        }
-
-        cursor.close()
-        db.close()
-        return categories
-    }
-
 
     fun getAllInsurances(): ArrayList<Insurance> {
         val insurances = ArrayList<Insurance>()
@@ -143,28 +91,24 @@ class SqlOpenHelper(
         }
 
         if (cursor.moveToFirst()) {
-            do {
-                val id = cursor.getString(0)
-                val name = cursor.getString(1)
-                val initDate = cursor.getString(2)
-                val endDate = cursor.getString(3)
-                val price = cursor.getString(4)
-                val description = cursor.getString(5)
-                val category = cursor.getString(6)
-                val state = cursor.getString(7)
-                insurances.add(
-                    Insurance(
-                        id,
-                        name,
-                        initDate,
-                        endDate,
-                        price,
-                        description,
-                        category,
-                        state
-                    )
+            do{
+                val insurance = Insurance(
+                    cursor.getString(0).toInt(),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getString(4),
+                    cursor.getString(5),
+                    cursor.getString(6).toInt(),
+                    cursor.getString(7),
+                    cursor.getString(8),
+                    cursor.getString(9),
+                    cursor.getString(10)
                 )
+
+                insurances.add(insurance)
             } while (cursor.moveToNext())
+
         }
 
         cursor.close()
@@ -173,43 +117,12 @@ class SqlOpenHelper(
         return insurances
     }
 
-    fun getCategoryOfInsurances(): ArrayList<String> {
-        val images = ArrayList<String>()
-        val db = readableDatabase
-        val cursor: Cursor?
-
-        try {
-            cursor = db.rawQuery(
-                "SELECT C.IMAGE, C.COLOR FROM $TABLE_NAME_CATEGORIES AS C, $TABLE_NAME_INSURANCES AS I WHERE C.ID == I.CATEGORY",
-                null
-            )
-        } catch (e: Exception) {
-            return images
-        }
-
-        if (cursor.moveToFirst()) {
-            do {
-                val image = cursor.getString(0)
-                val color = cursor.getString(1)
-                images.add("$image,$color")
-            } while (cursor.moveToNext())
-        }
-
-        cursor.close()
-        db.close()
-
-        return images
-    }
-
     fun <T> delete(data: T) {
         val db = writableDatabase
 
         when (data) {
-            is Category -> {
-                db.delete(TABLE_NAME_CATEGORIES, "ID = ?", arrayOf(data.id))
-            }
             is Insurance -> {
-                db.delete(TABLE_NAME_INSURANCES, "ID = ?", arrayOf(data.id))
+                db.delete(TABLE_NAME_INSURANCES, "ID = ?", arrayOf(data.id.toString()))
             }
         }
 
@@ -221,18 +134,6 @@ class SqlOpenHelper(
         val db = writableDatabase
 
         when (data) {
-            is Category -> {
-                val values = ContentValues().apply {
-                    put("ID", data.id)
-                    put("NAME", data.name)
-                    put("IMAGE", data.image)
-                    put("COLOR", data.color)
-                    put("CATEGORY_NAME", data.categoryName)
-                }
-
-                db.update(TABLE_NAME_CATEGORIES, values, "ID = ?", arrayOf(data.id))
-            }
-
             is Insurance -> {
                 val values = ContentValues().apply {
                     put("ID", data.id)
@@ -245,7 +146,7 @@ class SqlOpenHelper(
                     put("STATE", data.state)
                 }
 
-                db.update(TABLE_NAME_INSURANCES, values, "ID = ?", arrayOf(data.id))
+                db.update(TABLE_NAME_INSURANCES, values, "ID = ?", arrayOf(data.id.toString()))
             }
         }
 

@@ -2,6 +2,7 @@ package com.example.smart_insurance.adapter
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,13 +10,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.smart_insurance.R
 import com.example.smart_insurance.model.Category
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 class CategoryAdapter(
     private val itemClickListener: OnItemClickListener,
     private var categories: ArrayList<Category>
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
+
+    private var amount = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val view =
@@ -51,9 +60,42 @@ class CategoryAdapter(
 
         fun bind(category: Category) {
 
-            Glide.with(image).load(category.image).into(image)
-            title.text = category.name
-            layout.setBackgroundColor(Color.parseColor(category.color))
+            Firebase.storage.reference.child("categoriesImages")
+                .child(category.image).downloadUrl.addOnSuccessListener {
+                    Glide.with(image).load(it).listener(object: RequestListener<Drawable?>{
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable?>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable?>,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            title.text = category.name
+                            layout.setBackgroundColor(Color.parseColor(category.color))
+                            amount += 1
+
+                            if (amount == categories.size - 1) {
+                                itemClickListener.recyclerVisibility()
+                            }
+
+
+                            return false
+                        }
+
+                    }).into(image)
+
+
+
+                }
 
         }
 
@@ -67,6 +109,7 @@ class CategoryAdapter(
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
+        fun recyclerVisibility()
     }
 
 }

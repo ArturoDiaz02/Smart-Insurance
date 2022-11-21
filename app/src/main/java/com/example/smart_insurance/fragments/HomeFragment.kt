@@ -33,7 +33,7 @@ class HomeFragment(private val user: User) : Fragment(), InsuranceAdapter.OnItem
         binding.name.text = user.name + " " + user.lassName
 
         sqlOpenHelper = SqlOpenHelper(requireContext())
-        setAdapter(sqlOpenHelper.getAllInsurances(), sqlOpenHelper.getCategoryOfInsurances())
+        setAdapter(sqlOpenHelper.getAllInsurances())
 
         return binding.root
     }
@@ -52,11 +52,12 @@ class HomeFragment(private val user: User) : Fragment(), InsuranceAdapter.OnItem
 
     override fun onItemClick(position: Int) {
         val intent = Intent(this@HomeFragment.requireContext(), ObjectDetails::class.java)
+        intent.putExtra("insurance", position)
         startActivity(intent)
     }
 
-    private fun setAdapter(insurance: ArrayList<Insurance> , imageCategory: ArrayList<String>) {
-        adapter = InsuranceAdapter(this, insurance, imageCategory)
+    private fun setAdapter(insurance: ArrayList<Insurance> ) {
+        adapter = InsuranceAdapter(this, insurance)
         val recycler = binding.listView
         recycler.setHasFixedSize(true)
         recycler.layoutManager = LinearLayoutManager(activity)

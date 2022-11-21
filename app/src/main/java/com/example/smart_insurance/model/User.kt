@@ -9,14 +9,15 @@ data class User(
     val dateOfBirth: String,
     val cc: String,
     val email: String,
-    val profileImage: String? = null
+    val profileImage: String? = null,
+    val totalInsurance: Int = 0
 
 ) : Serializable {
     override fun toString(): String {
         return super.toString()
     }
 
-    constructor() : this("", "", "", "", "", "")
+    constructor() : this("", "", "", "", "", "", "", 0)
 
 }
 

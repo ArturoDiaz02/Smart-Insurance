@@ -3,13 +3,16 @@ package com.example.smart_insurance.model
 import java.io.Serializable
 
 data class Insurance(
-    val id: String,
+    val id: Int,
     val name: String,
     val initDate: String,
     val endDate: String,
     val price: String,
     val description: String,
-    val category: String,
+    val category: Int,
+    val category_image: String,
+    val category_color: String,
+    val images: String,
     val state: String
 
 ) : Serializable {
@@ -17,5 +20,5 @@ data class Insurance(
         return super.toString()
     }
 
-    constructor() : this("", "", "", "", "", "", "", "")
+    constructor() : this(0, "", "", "", "", "", -1, "", "", "", "")
 }

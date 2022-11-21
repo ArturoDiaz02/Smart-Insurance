@@ -1,11 +1,9 @@
 package com.example.smart_insurance.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
-import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,10 +16,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.smart_insurance.views.CreateObject
 import com.example.smart_insurance.adapter.CategoryAdapter
 import com.example.smart_insurance.databinding.FragmentAddBinding
-import com.example.smart_insurance.db.SqlOpenHelper
 import com.example.smart_insurance.model.Category
 import com.example.smart_insurance.model.User
 import com.example.smart_insurance.dialog.ProgressCycleBar
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlin.collections.ArrayList
 
 class AddFragment(private val user: User) : Fragment(), CategoryAdapter.OnItemClickListener {
@@ -31,12 +30,11 @@ class AddFragment(private val user: User) : Fragment(), CategoryAdapter.OnItemCl
     private val progressBar = ProgressCycleBar()
 
     private lateinit var adapter: CategoryAdapter
-    private lateinit var sqlOpenHelper: SqlOpenHelper
+    private val categories: ArrayList<Category> = ArrayList()
 
     companion object {
         @JvmStatic
         fun newInstance(user: User) = AddFragment(user)
-        private const val SECONDS: Long = 1000
     }
 
     override fun onCreateView(
@@ -47,19 +45,14 @@ class AddFragment(private val user: User) : Fragment(), CategoryAdapter.OnItemCl
 
         progressBar.show(requireActivity().supportFragmentManager, "progress")
 
-        object: CountDownTimer(SECONDS, 500) {
-            override fun onTick(millisUntilFinished: Long) {
+        Firebase.firestore.collection("categories").orderBy("id").get().addOnSuccessListener { result ->
+            for (document in result) {
+                val category = document.toObject(Category::class.java)
+                categories.add(category)
             }
 
-            override fun onFinish() {
-                recyclerVisibility()
-            }
-        }.start()
-
-        sqlOpenHelper = SqlOpenHelper(requireContext())
-        val categories = sqlOpenHelper.getAllCategories()
-
-        setRecyclerView(categories)
+            setRecyclerView(categories)
+        }
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -103,7 +96,6 @@ class AddFragment(private val user: User) : Fragment(), CategoryAdapter.OnItemCl
     }
 
     override fun onDestroyView() {
-        sqlOpenHelper.close()
         _binding = null
         super.onDestroyView()
     }
@@ -115,7 +107,8 @@ class AddFragment(private val user: User) : Fragment(), CategoryAdapter.OnItemCl
 
         if (networkInfo != null) {
             val intent = Intent(this@AddFragment.requireContext(), CreateObject::class.java)
-            intent.putExtra("position",position)
+            intent.putExtra("position", position)
+            intent.putExtra("userId", user.id)
             startActivity(intent)
 
         } else {
@@ -125,7 +118,7 @@ class AddFragment(private val user: User) : Fragment(), CategoryAdapter.OnItemCl
 
     }
 
-    fun recyclerVisibility() {
+    override fun recyclerVisibility() {
         binding.listViewCategories.visibility = View.VISIBLE
         progressBar.dismiss()
 

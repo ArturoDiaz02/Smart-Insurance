@@ -3,7 +3,7 @@ package com.example.smart_insurance.model
 import java.io.Serializable
 
 data class Category(
-    var id: String,
+    var id: Int,
     var name: String,
     var image: String,
     var color : String,
@@ -14,6 +14,6 @@ data class Category(
         return super.toString()
     }
 
-    constructor() : this("", "", "", "", "")
+    constructor() : this(-1, "", "", "", "")
 
 }

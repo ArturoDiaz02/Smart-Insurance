@@ -14,8 +14,7 @@ import com.example.smart_insurance.model.Insurance
 
 class InsuranceAdapter(
     private val itemClickListener: OnItemClickListener,
-    private val insurances: ArrayList<Insurance>,
-    private val category: ArrayList<String>,
+    private val insurances: ArrayList<Insurance>
 
     ) : RecyclerView.Adapter<InsuranceAdapter.CardViewHolder>() {
 
@@ -25,7 +24,7 @@ class InsuranceAdapter(
     }
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
-        holder.bind(insurances[position], category[position])
+        holder.bind(insurances[position])
     }
 
     override fun getItemCount(): Int {
@@ -45,14 +44,12 @@ class InsuranceAdapter(
         }
 
         @SuppressLint("SetTextI18n")
-        fun bind(insurance: Insurance, categoryData: String) {
+        fun bind(insurance: Insurance) {
 
-            val data = categoryData.split(",")
-
-            Glide.with(image).load(data[0]).into(image)
+            Glide.with(image).load(insurance.category_image).into(image)
             title.text = insurance.name
             date.text = insurance.initDate + " - " + insurance.endDate
-            layout.background.setTint(Color.parseColor(data[1]))
+            layout.background.setTint(Color.parseColor(insurance.category_color))
 
         }
 

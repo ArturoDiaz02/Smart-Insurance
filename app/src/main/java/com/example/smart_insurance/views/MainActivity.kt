@@ -1,11 +1,14 @@
 package com.example.smart_insurance.views
 
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.smart_insurance.R
 import com.example.smart_insurance.databinding.ActivityMainBinding
@@ -58,10 +61,21 @@ class MainActivity : AppCompatActivity(), ProfileFragment.OnItemClickListener {
         }
 
         binding.floatingActionButton.setOnClickListener {
-            setFragment(AddFragment.newInstance(user!!))
-            binding.floatingActionButton.hide()
-            binding.bottomNavigationView.menu.getItem(1).isChecked = true
-            itemEnable(true)
+
+            val connectivityManager =
+                ContextCompat.getSystemService(this, ConnectivityManager::class.java)
+            val networkInfo = connectivityManager?.activeNetwork
+
+            if (networkInfo != null) {
+                setFragment(AddFragment.newInstance(user!!))
+                binding.floatingActionButton.hide()
+                binding.bottomNavigationView.menu.getItem(1).isChecked = true
+                itemEnable(true)
+
+            } else {
+                Toast.makeText(this, "No hay conexión a internet", Toast.LENGTH_SHORT).show()
+            }
+
 
         }
 
