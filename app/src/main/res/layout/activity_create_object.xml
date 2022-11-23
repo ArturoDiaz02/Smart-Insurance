@@ -58,11 +58,11 @@
         android:background="@drawable/shape_image"
         android:contentDescription="Main image"
         android:scaleType="centerCrop"
-        android:src="@drawable/addimg"
+        android:src="@drawable/oie_png"
         app:layout_constraintEnd_toStartOf="@+id/SecondaryOneImg"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/addimg" />
+        tools:srcCompat="@drawable/oie_png" />
 
     <ImageButton
         android:id="@+id/SecondaryOneImg"
@@ -75,8 +75,8 @@
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toStartOf="@+id/SecondaryTwoImg"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/addimg"
-        tools:srcCompat="@drawable/addimg" />
+        app:srcCompat="@drawable/oie_png"
+        tools:srcCompat="@drawable/oie_png" />
 
     <ImageButton
         android:id="@+id/SecondaryThreeImg"
@@ -89,8 +89,8 @@
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toStartOf="@+id/SecondaryFourImg"
         app:layout_constraintTop_toBottomOf="@+id/SecondaryOneImg"
-        app:srcCompat="@drawable/addimg"
-        tools:srcCompat="@drawable/addimg" />
+        app:srcCompat="@drawable/oie_png"
+        tools:srcCompat="@drawable/oie_png" />
 
     <ImageButton
         android:id="@+id/SecondaryFourImg"
@@ -103,8 +103,8 @@
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/SecondaryTwoImg"
-        app:srcCompat="@drawable/addimg"
-        tools:srcCompat="@drawable/addimg" />
+        app:srcCompat="@drawable/oie_png"
+        tools:srcCompat="@drawable/oie_png" />
 
     <ImageButton
         android:id="@+id/SecondaryTwoImg"
@@ -117,8 +117,8 @@
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/addimg"
-        tools:srcCompat="@drawable/addimg" />
+        app:srcCompat="@drawable/oie_png"
+        tools:srcCompat="@drawable/oie_png" />
 
     <EditText
         android:id="@+id/editTextTextPersonName"
@@ -128,7 +128,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="15dp"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/lavender"
         android:ems="10"
         android:hint="Name"
         android:inputType="textPersonName"
@@ -144,9 +144,10 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="171dp"
         android:layout_marginBottom="20dp"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/lavender"
         android:ems="10"
         android:hint="Price"
         android:inputType="textPersonName"
@@ -154,7 +155,8 @@
         android:textColorHint="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/checkBox2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
@@ -164,8 +166,9 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="20dp"
-        android:background="@color/white"
-        app:boxBackgroundColor="@color/white"
+        android:background="@color/lavender"
+        app:boxBackgroundColor="#E5E2E8"
+        app:circularflow_defaultRadius="@dimen/cardview_default_radius"
         app:layout_constraintBottom_toTopOf="@+id/editTextPrice"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -182,14 +185,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="259dp"
         android:layout_marginBottom="20dp"
         android:buttonTint="@color/white"
         android:text="Verify"
-        android:visibility="invisible"
         android:textColor="@color/white"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/createBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPrice" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
