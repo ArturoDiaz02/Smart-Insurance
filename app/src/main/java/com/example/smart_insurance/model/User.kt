@@ -9,7 +9,7 @@ data class User(
     val dateOfBirth: String,
     val cc: String,
     val email: String,
-    val profileImage: String? = null,
+    var profileImage: String? = null,
     val totalInsurance: Int = 0
 
 ) : Serializable {

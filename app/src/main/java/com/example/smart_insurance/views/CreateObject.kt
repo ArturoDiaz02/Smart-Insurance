@@ -16,7 +16,6 @@ import com.example.smart_insurance.model.Category
 import com.example.smart_insurance.model.Insurance
 import com.example.smart_insurance.model.User
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.time.LocalDateTime
@@ -114,33 +113,39 @@ class CreateObject : AppCompatActivity() {
                 .addOnSuccessListener { result ->
                     val category = result.documents[0].toObject(Category::class.java)
 
-                    Firebase.storage.reference.child("categoriesImages").child(category!!.image).downloadUrl.addOnSuccessListener { image ->
+                    val initDate = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        LocalDateTime.now()
+                    } else {
+                        TODO("VERSION.SDK_INT < O")
+                    }
 
-                        val initDate = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            LocalDateTime.now()
-                        } else {
-                            TODO("VERSION.SDK_INT < O")
-                        }
+                    val endDate = initDate.plusDays(30)
 
-                        val endDate = initDate.plusDays(30)
+                    var insuranceImages = ""
+                    val userId = intent.getStringExtra("userId")!!
 
-                        var insuranceImages = ""
-                        val userId = intent.getStringExtra("userId")!!
+                    imageArray.forEach { uri ->
+                        val uuid = UUID.randomUUID()
+                        val storageRef =
+                            Firebase.storage.reference.child("insurancesImages").child(userId)
+                                .child("$uuid.jpg")
+                        storageRef.putFile(uri).addOnSuccessListener {
+                            storageRef.downloadUrl.addOnSuccessListener { uri ->
+                                insuranceImages += "$uri,"
+                                amount++
 
-                        imageArray.forEach { uri ->
-                            val uuid = UUID.randomUUID()
-                            val storageRef = Firebase.storage.reference.child("insurancesImages").child(userId).child("$uuid.jpg")
-                            storageRef.putFile(uri).addOnSuccessListener {
-                                storageRef.downloadUrl.addOnSuccessListener { uri ->
-                                    insuranceImages += "$uri,"
-                                    amount++
-
-                                    if(amount == imageArray.size){
-                                        createInsurance(initDate, endDate, category, image.toString(), insuranceImages, userId)
-                                    }
+                                if (amount == imageArray.size) {
+                                    createInsurance(
+                                        initDate,
+                                        endDate,
+                                        category!!,
+                                        insuranceImages,
+                                        userId
+                                    )
                                 }
                             }
                         }
+
 
                     }
 
@@ -154,7 +159,7 @@ class CreateObject : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun createInsurance(initDate: LocalDateTime, endDate: LocalDateTime, category: Category, image: String, insuranceImages: String, userId: String) {
+    private fun createInsurance(initDate: LocalDateTime, endDate: LocalDateTime, category: Category, insuranceImages: String, userId: String) {
 
         Firebase.firestore.collection("users").document(userId).get().addOnSuccessListener {
             val user = it.toObject(User::class.java)!!
@@ -167,7 +172,7 @@ class CreateObject : AppCompatActivity() {
                 binding.editTextPrice.text.toString(),
                 "Pendiente",
                 category.id,
-                image,
+                category.image,
                 category.color,
                 insuranceImages,
                 "true"

@@ -16,8 +16,6 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.smart_insurance.R
 import com.example.smart_insurance.model.Category
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 
 class CategoryAdapter(
     private val itemClickListener: OnItemClickListener,
@@ -60,44 +58,40 @@ class CategoryAdapter(
 
         fun bind(category: Category) {
 
-            Firebase.storage.reference.child("categoriesImages")
-                .child(category.image).downloadUrl.addOnSuccessListener {
-                    Glide.with(image).load(it).listener(object: RequestListener<Drawable?>{
-                        override fun onLoadFailed(
-                            e: GlideException?,
-                            model: Any?,
-                            target: Target<Drawable?>?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            TODO("Not yet implemented")
-                        }
-
-                        override fun onResourceReady(
-                            resource: Drawable?,
-                            model: Any?,
-                            target: Target<Drawable?>,
-                            dataSource: DataSource?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            title.text = category.name
-                            layout.setBackgroundColor(Color.parseColor(category.color))
-                            amount += 1
-
-                            if (amount == categories.size - 1) {
-                                itemClickListener.recyclerVisibility()
-                            }
-
-
-                            return false
-                        }
-
-                    }).into(image)
-
-
-
+            Glide.with(image).load(category.image).listener(object : RequestListener<Drawable?> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable?>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    TODO("Not yet implemented")
                 }
 
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable?>,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    title.text = category.name
+                    layout.setBackgroundColor(Color.parseColor(category.color))
+                    amount += 1
+
+                    if (amount == categories.size - 1) {
+                        itemClickListener.recyclerVisibility()
+                    }
+
+
+                    return false
+                }
+
+            }).into(image)
+
+
         }
+
 
         override fun onClick(v: View?) {
             val position = adapterPosition

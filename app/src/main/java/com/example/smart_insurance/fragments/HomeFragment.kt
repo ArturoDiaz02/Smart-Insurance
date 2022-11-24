@@ -53,6 +53,7 @@ class HomeFragment(private val user: User) : Fragment(), InsuranceAdapter.OnItem
     override fun onItemClick(position: Int) {
         val intent = Intent(this@HomeFragment.requireContext(), ObjectDetails::class.java)
         intent.putExtra("insurance", position)
+        intent.putExtra("user", user.id)
         startActivity(intent)
     }
 

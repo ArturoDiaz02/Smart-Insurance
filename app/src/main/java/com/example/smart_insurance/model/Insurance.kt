@@ -13,7 +13,7 @@ data class Insurance(
     val category_image: String,
     val category_color: String,
     val images: String,
-    val state: String
+    var state: String
 
 ) : Serializable {
     override fun toString(): String {
